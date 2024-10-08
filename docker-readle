@@ -1,0 +1,951 @@
+What is virtualization, what is the purpose of it?
+Virtualization is a technic or a mechanism through which we can run multiple parallel isolated environments on a single machine through the help of using Hypervisor Software.
+	
+There are many reasons for which we want to run multiple parallel isolated environments on a single computer
+1. We can effectively utilize the underlying hardware resources of a computer by running multiple parallel environments on a single machine
+2. We can reduce the cost of infrastructure in building, deploying and delivering the software applications by reusing the same computer in running multiple applications
+
+Virtualization works on a software called "Hypervisor", which is responsible for talking to the host operating system of the computer in sharing the physical system resources of the machine to multiple virtual machines running on the top of hypervisor
+
+What is Containerization?
+Containerization is a technology through which we can package software application and its dependent libraries together and can run within a container which is isolated from other software application that are running on the same computer is called "Containerization"	
+	
+In case of containerization the software programs are packaged with libraries and binaries through which they communicate within the containerization tool which inturn takes care of communicating with the host operating system for sharing the physical hardware resources of the computer to multiple containers running on the same environment
+
+Looks like both these technologies helps in running software applications isolated from each other on a single computer, then which one should be used one, what are the advantages and dis-advantages of each of them with others?
+
+Virtualization
+advantages:-
+1. each virtual machine can run their own operating system independent of the host operating system of the computer, so that we can easily deploy and run software applications on different operating system environments
+2. we can software applications which requires dedicated operating system of their own by creating virtual machine and installing the operating system on the vm separately
+3. all the virtual machines are isolated from each other and runs independent of the host operating system thus enabling highest level of security, if the host has been comprised also still the guest machines are not impacted as each vm runs on a dedicated os
+4. more suitable for deploying and running applications that are long-running processes
+
+dis-advantages:-
+1. each of the virtual machines are installed with their independent operating system of their own, thus making these virtual machines heavy weight and consumes lot of system resources in running the software applications
+2. since the virtual machines are heavy weight those are huge in size in diskspace and are not portable to be carried across the environments easily
+3. it is difficult to achieve CI/CD through virtualization as these virtual machine images are not easy to carry across the environments
+4. we cannot effectively utilize the computing resources of the underlying computer, since each virtual machine consumes huge amount of resources of the computer
+5. as each virtual machines runs with a full blow operating system of their own, importing the virtual machine and starting the applications inside them takes lot of time due to which we cannot quickly achieve scalability
+
+From the above we can understand virtualization is suitable for
+	1. creating and providing dedicated computer environments that can be used by different people isolated from another, for eg.. a cloud provider can effectively use virtualization techinic in sharing the underlying hardware resources of a computer in creating dedicated environments for multiple users
+	2. In an organization the administrators can create multiple virtual machine environments to provide independent teams dedicated environments for developing, deploying and testing their software applications individually by lowering the cost of infrastructure 
+	Containerization:
+-------------------
+advantages:-
+1. containers are light weight as they dont run operating system of their own within them so we can run multiple containers on a machine we can optimally utilize the underlying hardware resources of the computer
+2. container images are light weight thus making them portable across the computers
+3. it is easy to implement ci/cd using containerization technology as the container images are small and easily carriable
+4. applications are easily scalable through containerization technology as container doesnt require lot of time in booting
+5. patching and upgrading the containers are easy when compared with virtual machines
+
+dis-advantages:-
+1. we cannot run the container with its own dedicated operating system independent of the host operating system
+2. less secured when compared with virtualization
+3. only suitable for short-running applications only
+------------------------------------------------------------------------------------------
+When to use virtualization and containerization?
+------------------------------------------------
+if we want to share isolated environments of indepedent operating systems across the teams or users we need to go for virtualization. if we just wanted to run multiple applications isolated from each other on the same machine then using containerization
+------------------------------------------------------------------------------------------
+What is containerization, why do we need to use it?
+Using containerization technology we can package software application and its dependent libraries, with bins/libs required for running the application and instructions for running the application and execute it in an isolated manner from another applications running on the same computer
+
+what are the benefits of using containerization?
+There are 2 advantages of using containerization
+1. using containerization technology we can abstract the underlying details of the technology and the way we need to run the application from the opsengineer and can standardize the delivery of the s/w application
+we are standardizing the workflow of delivering a software application 
+
+In-Short: it abstracts the delivery of a software application, so that devops engineer without bothering about the underlying technology in which it is built he can run any s/w application by following standard workflow of execution.
+
+2. as containers are light weight we can run multiple containers on the same machine and can optimize the utlization of resources of the computer.
+
+Why do we need to use Containerization technology, what are the advantages of it?
+There are 2 main reasons why we use containerization technology
+1. through containerization technology we abstract the delivery of an software application.  The developer upon building the software application, he package the sofware application with corresponding libraries and instructions to run it in containerized image and delivers it. 
+The devops engineer or qa or enduser irrespective of the technology application is build, they can quickly run the software application out of the containerized image we delivered.
+So using the containerization technology we standarized the workflow of deliverying and running an sofware applications
+as the container images are light weight we can achieve ci/cd easily
+
+2. The containers are light weight and are packaged with only bins/libs, so with low utilization resources we can run the containers on a machine 
+------------------------------------------------------------------------------------------
+There are lot of containerization technology supported tools are there in the market like.
+	1. docker
+	2. redhat openshift
+	3. mesosphere
+	4. Microsoft Container
+
+out of the above the most popular is "docker".
+	
+docker = is a word that is derived from dock-worker, dock worker is a job of a person who loads containers and unloads the containers in a ship, from where it has been named  as "docker".
+	
+docker is a tool through which we can implement containerization technology where we can package software applications into docker images and ship them. people can run applications packaged in docker isolated from other as containers.
+	
+docker workflow:
+develop -> package ->ship
+develop -> build -> package -> release
+------------------------------------------------------------------------------------------
+How does the containers are kept isolated from each other and are running on the same machine?
+To make these containers work on the same machine isolated from each other there are lot of enhancements and features to be added as part of the linux operating system. To make the containerization work, there are many software gaints especially the Google LLC has contributed greatly in required features to the linux operating system to make these containers run isolated from each other.
+	
+#1 Linux namespaces
+The docker containers works on the concept of linux namespaces to isolate one container from another. The docker container will be executed within the namespace and limited to access the resources allocated to the namespace only, through which we can run multiple containers isolated from each other.
+	
+Docker uses the below namespaces of the linux to run containers isolated
+1. pid = runs the container in a separate process namespace
+2. net = network namespace managing the network interfaces
+3. ipc = inter-process communication namespace
+4. mnt = filesystem mounts
+5. uts = unix timesharing
+
+#2. Control Groups (cgroups)
+docker engine uses cgroups of the linux operating system in sharing the physical resources of the computer and limiting their usage by the containers
+
+#3. Union FileSystem
+docker container images are packaged and assembled based on union filesystem technic
+
+What is docker architecture?
+There are 3 parts in docker architecture
+1. docker engine
+docker engine is the main component that takes care of running docker containers from an docker image
+
+There are 3 main components are there within the docker engine
+	1.1 docker daemon
+	1.2 containerd
+	1.3 runc
+
+2. docker cli 
+docker cli stands for docker command-line interface, which is provided as part of the docker install. which has handful commands that allows the users to communicate with docker engine in managing images/containers
+
+3. docker container registry
+docker container registry is a repository where docker images are published and distributed across the environments/world
+The docker has provided a "http://hub.docker.com" docker registry in which people around the world build their own docker images publishes and distributes to the world
+
+
+oci specification
+------------------
+open container initiative specification
+
+it has standardized the 
+#1 oci images = standardized the way images has to be build
+#2 oci runtime = standardized the way containers are spawned and managed on the underlying operating system
+
+#1.1 docker daemon
+docker daemon is an http endpoints through which the docker engine is exposed to the users. the users can interact with the docker engine by using docker cli, so that the cli will sends the commands over the network using http protocol and communicate with docker daemon
+The docker daemon based on instruction received will ask containerd to perform appropriate operation
+	
+#1.2 containerd
+containerd = is a component build by docker team, which takes care of building images, pulling images from container registry, convert docker images into oci image format and passes it as an input to the runc for running a docker container
+
+#1.3 runc = is an low-level component that interacts with the underlying operating system of our computer in creating/destroying/managing the containers based on the oci image specification
+------------------------------------------------------------------------------------------
+
+What are docker objects?
+There are 2 types of docker objects are there
+1. docker image
+2. docker container
+
+#1. docker image
+There are 2 characteristics are there in docker image
+1.1 docker images are read-only
+1.2 docker images are layered and stackable 
+whenever we build an docker image we derive our image by referring base image. since the base image has not been modified rather referred we gain 2 advantages
+	1. while creating images for various different applications, all of the application images refers to the same base image due to which the harddisk storage space can be reduced
+	2. bandwidth consumption in publishing and distributing images will be reduced
+	
+#1.1 why docker images are read-only?
+when we run a docker container out of an image, the docker container creates an container writable layer ontop of the docker image into which the containerized application writes the data which is generated while the application is running, keeping underlying docker image read-only.
+So that the same docker image can be reused in creating any number of containers from that image which makes the docker containers highly scalable with low storage space
+
+Per each container there is a separate container writable layer will be there which is created at the time of creating the container and will be destroyed automatically at the end of the container
+
+The docker users storage drivers for writing the data into the container writable layer of the container
+
+#2. docker container
+A running processes or a program that is created out of an existing docker image that runs isolated from other process is called an container.
+The lifetime the container is dependent on the amount of time the application running, once the application inside the container terminates, the container will gets terminated.
+------------------------------------------------------------------------------------------
+How to install the docker?
+docker supports both windows/linux operating system.
+earlier docker used to work on linux operating only as it greatly depends on features like linux namespaces, cgroups and union filesystem.
+Microsoft has worked hardly in bringing docker on to the Window platform and has added all required features in Windows to make docker work.
+	
+From Windows 10 onward in professional and above versions of it, support for running docker is available
+The docker has shipped an tool called docker-desktop-windows that can be installed on the windows 10 professional or above to use docker.
+	
+From docker linux to docker windows
+1. The docker cli changes greatly
+2. The docker images also changes
+3. The size of the docker images on windows is more than linux
+
+Why docker images are read-only?
+When we create an container out of an image, the application running within the container may generate some data during execution and stores on the underlying image, insuch case for running multiple containers of the same application we need several copies of docker image which increases the harddisk storage in running/scaling the docker applications.
+
+To avoid this the docker has comeup with images are readonly. So, when we run a docker container it sits ontop of the read-only docker image and adds an container writable layer into which the application of the container will writes the data, since the underlying image is readonly, the same image can be reused in running multiple containers of the application
+So we can save lot of disk-space in running/scaling the containerized application by making docker images as read-only
+
+What is the difference between windows docker images and linux docker images?
+How to choose between windows docker image vs linux docker image?
+------------------------------------------------------------------------------------------
+How to install docker?
+
+1. Windows Support
+-----------------
+initially there is no support of running docker on windows operating system is available, The Microsoft has made lot of improvements as part of the windows platform to bring docker on windows.
+
+From Windows 10 Home/Professional/Ultimate verions we can install and run docker containers
+Windows Server > 2016
+The docker team has provided an tool called docker-desktop-windows to run docker on windows operating system.
+
+Windows 7 we can install and run docker using docker-tool-box-for-windows
+----------------------------------------------------------------------------------
+2. Mac operating system
+---------------------
+There is a tool provided by docker team called "docker-desktop for mac" which we can directly install on mac and run docker containers
+------------------------------------------------------------------------------------------
+
+3. Ubuntu linux operating system
+------------------------------
+1. sudo apt update
+2. sudo apt install apt-transport-https ca-certificates curl software-properties-common
+3. sudo apt install -y docker-ce
+
+after installing the docker we can check whether it is running or not using
+sudo systemctl docker
+
+The docker software will be installed by creating an docker user and docker group and runs onbehalf of that user only, so that it cannot access any other files/folders of linux operating system apart from the user home and cannot access any other process on the machine
+
+So if we have a logged-in user as "sriman", he cannot access or manage docker containers/images that are running on docker engine which is running under "docker user".
+The only we way we can make "sriman" manage docker engine is
+1. he should be a sudoer (not recommended)
+2. add sriman to docker group so that sriman can manage docker engine
+
+sudo usermod -aG docker sriman
+logout from shell and login back so that you can manage the docker engine through "sriman" user.
+------------------------------------------------------------------------------------------
+1. install oracle virtualbox and virtualbox extension pack on your windows computer
+2. open virtualbox manager and create a new virtual machine.
+Install the below 2 softwares
+
+#1. VirtualBox-6.1.32-149290-Win.exe
+#2. Oracle_VM_VirtualBox_Extension_Pack-6.1.32
+-------------------------------------------------------------
+Create virtual machine by using Virtualbox Manager
+start the machine and goto device at top and click on install guest edition from the cd image
+after installing the guest editions, restart the virtual machine
+------------------------------------------------------------------------------------------
+How to install docker on ubuntu machine?
+There are 2 versions of the docker
+1. docker community edition
+2. docker enterprise edition
+we have to install community edition only which is opensource
+
+#1. open terminal on ubuntu
+#2. sudo apt update -y
+#3. There are few mandatory dependent packages that has to be installed before installing the docker on the machine
+sudo apt install apt-transport-https ca-certificates curl software-properties-common
+
+#4. 
+docker is not available as part of ubuntu official repository, so we need to add docker repository to the source.list
+
+#5. we need to download and add gpg key of the repository 
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+
+#6. add docker repository to our sources.list
+sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable"
+
+#7. sudo apt update -y
+#8. sudo apt install docker-ce
+
+The above installation process creates an user: docker and group: docker and installs the docker software and configures it as system service under the user docker only
+
+Now our linux user cannot access the docker engine since he dont has access permissions, so we need to add the current linux user to docker group by running the below command
+
+#9. sudo usermod -aG docker $USER
+#10. sudo init 6
+-----------------------------------------------------------------------------------------
+How to create an ec2 instance?
+#1. login into amazon aws cloud console
+#2. choose from menu under compute -> ec2 
+#3. click on launch ec2 instance from the top right button of the console page
+#4. choose the ami as free-tier and select ubuntu-20.04 LTS as the ami click on next
+#4. select the shape of the instance as t2.micro only (others are chargeable)
+#5. leave the default vpc select and subnet also
+		public ip: enable public ip and click on add storage
+#6. in storage screen change from 8gb to 20 gb storage and click on next tags
+#7. in tags enter key as "Name" and value as "dockerworkstation" and click on next
+#8. security group
+		8.1 choose create new security group and leave next of the options as default and click on next
+#9. review and launch instance
+#10. choose the ssh key
+	10.1 choose create a new ssh key pair
+	10.2 enter keypair name as "dockerkp"
+	10.3 download the keypair and save to $USER_HOME/.ssh/
+#11. click on launch
+-----------------------------------------------------------------------------------------
+#1. goto ec2 instances screen and select the ec2 instance we provisioned and goto networking tab and copy the public ip address and save it on notepad
+
+#2. open gitbash (install git to have gitbash on your machine)
+#3. ssh -i ~/.ssh/dockerkp ubuntu@publicip
+			
+once after provision we just only need to ssh into the ec2 instance for using docker.
+-----------------------------------------------------------------------------------------
+The steps for installing the docker on ec2 ubuntu machine is same as described above.
+	
+
+1. What is containerization technology?
+containerization technology is used for running an software application isolated from others on a machine/computer
+
+purpose/advantage :-
+	1.1 containers are light weight and consumes very less amount of system resources in running an application (as the operating system will not be running within the container)
+	1.2 the software application delivery process can be abstracted, so that without knowing the underlying technology people can run the software
+---------------------------------------------------------------------------------------	
+When to use 
+containerization?:
+Containerization has to be used when we want to run multiple s/w applications on the same computer/machine isolated from each other
+
+virtualization?:
+If we want to provide 2 independent dedicated environments for different people for their usage, then we need to use virtualization
+-----------------------------------------------------------------------------------------
+
+What are the features of the linux operation system required for running containerization?
+1. Linux namespaces
+2. cgroups
+3. union filesystem
+------------------------------------------------------------------------------------------
+docker architecture
+There are 3 components are their in docker
+1. docker engine
+	1.1 docker daemon = api/http endpoints to allow users/clients to communicate with docker engine
+	1.2 containerd = pull the image from registry, convert into oci image format and pass to runc
+	1.3 runc = container runtime that creates the oci containers by talking to the underlying operating system
+	
+2. docker cli = tool for communicating with docker engine
+3. docker container registry = publishing and distributing the docker images
+------------------------------------------------------------------------------------------
+
+What are docker objects?
+There are 2 docker objects are there
+1. docker image
+an application packaged with software libraries, instructions in running the software application along with libs & bins required for communicating with docker engine put together is called an docker image
+characteristics:-
+	1. layered and stackable
+	2. read-only
+	
+2. docker container
+program or a process that is created out of an docker image which is under execution is called an "container".
+-----------------------------------------------------------------------------------------
+	
+docker workflow
+#1. package
+upon delivering software application by the developer, the devops engineer has to package the software application by building a docker image
+	
+#2. ship
+push the docker image into docker container registry
+
+#3. deliver/run
+pull the docker image from the docker container reigstry and run a container out of the image
+
+package -> ship -> deliver
+devops engineer plays/participates in all the 3 stages of the docker workflow.
+------------------------------------------------------------------------------------------
+How to run the docker container?
+let us explore how to run docker containers out of an existing docker images that are build only with operating system bits only.
+	
+#1 how to run a docker container interactively?
+docker container run -it image:tag command
+eg.:
+docker container run -it ubuntu:20.0 bin/bash
+
+The above command creates an docker container out of an docker image. here
+-it = stands for interactive execution saying execute the "command" specified, interactively inside the container
+
+When we run the above command docker engine does the below steps in running the container:
+1. docker engine upon receiving the request for running a docker container it checks whether the docker image with tag specified is available within the local docker image cache or not. If the image is not available in the local docker workstation, then the docker engine quickly connects to the docker container registry and pulls the docker image on to the docker workstation
+
+2. once the image is available on the docker workstation, the docker engine creates an docker container out of the image and kicks starts the default command written as part of the image in running the program inside the container
+
+3. when we provided -it with an overriding command, it tells the docker daemon dont run the default instruction on the container, instead execute the command given interactively
+
+so that we will enter into the container by running the command.
+
+#2. how to see the running containers on the docker workstation or on docker daemon?
+docker container ls
+
+CONTAINER ID   IMAGE          COMMAND      CREATED              STATUS              PORTS     NAMES
+7d082ce623b4   ubuntu:20.04   "bin/bash"   About a minute ago   Up About a minute             affectionate_heyrovsky
+
+The docker cli displays the output in a tabular fashion above
+CONTAINER ID = for each container docker engine creates it assigns a unique id with which we can refer the container
+IMAGE = the image:tag on whom this container has been created
+COMMAND = the command used in lauching the container
+CREATED = the elasped time when the container has been created
+STATUS = displays the current status of the container
+PORTS = ports exposed out of the container
+NAMES = for each container the docker generates a unique random name and assigns for easy reference
+we can manage a container either by using CONTAINER ID or NAME of the container.
+	
+#3. How to see all the docker containers on the machine?
+docker container ls -a
+-a = stands for all the containers irrespective of their status
+upon completing the execution of the program, docker engine terminates the container, but will not remove/destroy the container, because people/programmers may want to collect the logs generated by the container
+
+#4. How to remove the terminated container?
+docker container rm CONTAINER ID/CONTAINER NAME
+
+#5. the other way in seeing all the running container is using
+docker container ps = only shows running containers
+
+#6. How to stop an running container
+docker container stop CONTAINERID/CONTAINERNAME
+
+#7. how to forcible stop and remove a running container?
+by default when we run docker container rm ID/NAME, it will remove the container only if it is stopped/terminated, otherwise it results in an error.
+if we want to stop/remove a running container forcibly we can use
+docker container rm -f ID/NAME
+
+#8. How to remove all the stopped/exited containers at one shot?
+docker container prune
+will removes all the containers which are stopped/exited
+#1 How to run a docker container interactively?
+docker container run -it image:tag command
+
+#2 How to see the running containers on the docker workstation?
+docker container ls
+docker container ps
+
+#3. How to see all the containers on the docker workstation?
+docker container ls -a
+
+#4. How to stop a running docker container?
+docker container stop id/name
+
+#5. How to remove a docker container?
+docker container rm id/name
+
+#6. How to remove an running docker container?
+docker container rm -f id/name
+	
+#7. How to remove all the exited docker containers which are unused?
+docker container prune
+  #1. How to run a docker container as a daemon?
+There are software applications that are deployed on servers/platforms/infra/runtimes and executes for longer time, until we terminate. If we launch such packaged applications as docker containers normally/interactively, the keep hold of the terminal (TTY) and will be executed. If we close the terminal the containers will be terminated automatically
+
+So to ensure they dont block TTY and dont get terminated upon closing the terminal we need to launch such process non-interactively as daemons 
+
+docker container run -d image:tag 
+docker container run -d tomcat:9.0
+	
+#2. How to run a docker container with a given name?
+docker container --name containerName image:tag
+docker container -d --name tomcatserver tomcat:9.0
+	
+#3. How to launch a container that gets removed automatically upon termination?
+docker container run -d --name containerName --rm image:tag
+here rm indicates remove the container upon termination automatically
+
+#4. How to see the logs generated by the program running inside the container?
+docker container logs id/name
+docker container logs -f id/name = f stands for flow, means scroll through the generating logs of the container application
+
+#5. How to enter into a daemon container that is running and grab the TTY or execute a command?
+when we launch the container non-interactively the TTY (terminal) is not attached to the container and we cannot access/go inside the container
+
+docker container exec -it id/name command
+
+docker container run -d --name tomcatserver tomcat:9.0
+docker container exec -it tomcatserver bash
+
+#6. There is another way we can enter into running container as below.
+docker container attach id/name = will attaches the terminal to the container making it interactive. so if we exit from the terminal the container will be terminated
+
+#7. How to see the details of a container?
+docker container inspect id/name
+displays the entire information about the container like
+cpu, memory, storage, id, image_id, network interface cards, ip addresses, port nos exposed etc
+
+
+  1. How to run a docker container as a daemon container?
+docker container run -d image:tag
+
+2. How to run a container with a given name?
+docker container run -d --name containername image:tag
+
+3. How to run a container that gets removed automatically upon completing its execution?
+docker container run -d --rm image:tag
+
+4. How to execute a command on a running container?
+docker container exec -it id/containername command
+
+----------------------------------------------------------------------------------------
+How to run an mysql server docker container?
+1. docker container run -d --name mysql -e MYSQL_ROOT_PASSWORD=root -p3306:3306 mysql:8.0.28
+with the above command we are launching mysql server docker container by exposing the port 3306 for external access. 	
+	
+2. To access the mysql server running inside the container, we need to grab the container bash prompt interactively as below
+docker container exec -it mysql bash
+
+3. Now grab mysql prompt to access the database as below
+mysql -uroot -proot
+
+How to access the mysql server above from outside the container (for eg.. from docker workstation or any other remote computer)?
+since we have already exposed the mysql server port externally with 3306, the mysql server will be accessable with ip:port, we need to find ip address of the docker container to access
+
+docker container inspect mysql
+
+2. install mysql client tool on ubuntu or docker workstation.
+sudo apt update -y
+sudo apt install mysql-client-8.0
+	
+3. login into mysql sql-prompt using client tool
+mysql -hcontainerip -uroot -proot
+------------------------------------------------------------------------------------------
+5. How to start an stopped container?
+docker container start mysql
+
+note: when we stop a container, the container writable layer will not be destroyed, so when we restart the container all the data will be preserved. when we remove/destroy the container then only the container writable layer will be discarded along with container.
+-----------------------------------------------------------------------------------------
+6. How to attach the TTY onto a running container?
+docker container attach id/name
+
+7. How to see the logs of a container?
+docker container logs id/name
+------------------------------------------------------------------------------------------
+
+docker image management commands
+--------------------------------
+1. How to see all the docker images on the docker workstation or local cache?
+docker image ls
+
+2. How to see the details of the image?
+The details of image like Maintainer, Licensing, created date, supported platform, size, command with which container kickstarts etc
+docker image inspect image:tag
+
+3. by default when we launch a docker container by specifying an image, if the image is not found in the local cache or workstation, it will pulled from docker container registry, if we want to pull the image manually we can do that without launching the container using 
+docker image pull image:tag
+
+When the author is publishing an image into docker container registry he will attach an version number of the image which is called "tag". by default for each image there is a default tag called "latest", which is always pointing to the latest version of the image.
+#1 author has produced an mysql server image version mysql:8.0.28, now he will attach one more tag/alias name to the image as mysql:latest -> mysql:8.0.28
+#2 when the new version of the mysql server image has been release as mysql:9.0 then the author will retag the image as latest mysql:latest -> mysql:9
+
+so always if we want to work with latest version of an image use latest tag in pulling/running the containers.
+	
+4. How to retag/add an alias name to an existing image?
+docker image tag image:tag newimage:newtag
+
+5. How to remove an docker image?
+docker image rm image:tag = if there exists an container created on that image, then this produces error
+if there is a alias/tag on the image, then only the alias will be dropped, the image will not be removed utill all aliases are removed
+	
+to remove the container along with image we need to use
+docker image rm -f image:tag = -f stands for force to remove container along with image
+
+6. How to remove all the unused images on the workstation?
+docker image prune
+removes all the images which doesnt have containers created on them
+
+7. How to export an existing docker image on a machine?
+docker image save image:tag -o filename.tar
+the save exports the existing docker image in the docker workstation into a file
+-o stands for output into a filename
+
+8. How to load an docker image from an existing .tar file?
+docker image load -i filename.tar
+-i = stands for input file
+  9. How to push our own docker image into the docker container registry?
+-----------------------------------------------------------------------------------------
+1. login into the docker hub registry "http://hub.docker.com"
+2. navigate into the repositories menu from top and choose create repository inside it.
+3. provide a name for the repository in which we want to store an docker image.
+In one repository we store one docker image attaching with tags indicating multiple versions. Here the repository name is nothing but your docker image name
+4. goto your docker daemon or workstation and login into your docker hub registry using
+docker login (prompt for dockerid/password)
+	
+5. rename your local cached docker image into repository format as 
+dockerid/repositoryname:tag
+dockerid = helps to identify the account into which the image has to be pushed
+repositoryname = nothing but image name identifies into which repository of the user this image should be pushed
+tag = version of the image
+
+6. docker image push dockerid/repositoryname:tag
+-----------------------------------------------------------------------------------------
+How to change the default installation directory of a docker engine/daemon?
+	
+	How to change the default installation directory of the docker in an ec2 instance onto an EBS block storage volume mounted externally?
+	
+#1. provision an ec2 instance 
+#2. install the docker on the ec2 instance by following the instructions provided earlier
+#3. The docker will be installed by default on
+/var/lib/docker directory
+
+create and mount an EBS volume onto ec2 instance by following below instructions
+------------------------------------------------------------------------------------------
+#4. create an EBS volume by navigating into compute domain and choose ebs volume and click create
+#5. choose the region and availability zone same as your ec2 instance
+#6. after creating the EBS volume goto actions menu and click on attach to instance
+
+#7. Now the ebs volume will be detected as an device on the ec2 instance, so run the below command to identify the device name
+sudo fdisk -l
+here we can find an device volume of 100Gi located mostly with name /dev/xdvf
+
+#8. mount the EBS volume onto the ec2 instance by creating an directory
+sudo mkdir -p /u01/dev
+
+#9. format the EBS volume before mounting
+sudo mkfs.ext4 /dev/xdvf
+
+#10. mount /dev/xdvf /u01/dev
+------------------------------------------------------------------------------------------
+
+#11. stop the docker engine
+sudo systemctl stop docker
+
+#12. move the docker home directory into /u01/dev directory
+sudo mv /var/lib/docker /u01/dev/
+	
+#13. create an symlink under /var/lib with name docker pointing to /u01/dev/docker directory
+sudo ln -s /u01/dev/docker /var/lib/docker
+
+#14. start the docker 
+sudo systemctl start docker
+------------------------------------------------------------------------------------------
+Building docker images
+----------------------
+Instead of running docker containers out of an existing docker images build by docker team/partners/community, how can we package our own application with software packages and instructions?
+	
+To build a docker image with our application bits, software packages and instructions in running the application, we need to write Dockerfile in which we need to write image building instructions
+defining what software application, packages and instructions should be bundled in that image and pass it as an input to docker engine, asking him to package/generate an image out of instructions
+
+The image building instructions that we write in the Dockerfile are called "docker directives".
+
+using the docker directives we are going to achieve 2 things
+#1. all the immutable content that seems to common across all the containers of our applications should be packaged and placed as apart of docker image like
+	1.1 bins/libs
+	1.2 software packages
+	1.3 software applications
+so we write docker directive/instructions that will be executed during the time of building the docker image which takes care of including the immutable bits of our application into the image
+
+#2. using the docker directives we write container execution commands that has to be executed at the time of launching the container based on image
+
+Based on the above we can classify docker directives into 2 types
+1. build image instructions
+2. container instructions
+
+Into the docker image we will not package the source code of our application rather, because it is not a repository to distribute the source code. rather it is used for package executable application with dependencies and distribute across
+	
+How to build an docker image?
+To build an docker image for each project we want to package as an image we need to create a directory, in which we need to write a file with name "Dockerfile" without any extension in which we need to write build image instructions and container instructions inside it and pass it to the docker engine for building as an image
+
+What are the build image instructions that are there?
+1. FROM
+2. ARG
+3. RUN
+4. ADD
+5. WORKDIR
+6. COPY
+7. LABEL
+8. ENV
+
+What are the container instructions?
+1. CMD
+2. EXPOSE
+3. ENTRYPOINT
+4. HEALTHCHECK
+5. VOLUME
+What is docker build context?
+The directory under which we place the Dockerfile and run the docker build image is called "docker build context". When we trigger an image build using docker cli, the docker cli transfers all the contents including the sub-directories of the Dockerfile directory to docker engine making it available for docker image build process
+
+Within the Dockerfile we can write directives or instructions referring to which files or artifacts should be included in the docker image by using relative path "."
+
+Note: always create an new directory for every project and write Dockerfile inside it to build an image or keep it relative to your project directory. dont create Dockerfile under global directory like "/"
+------------------------------------------------------------------------------------------
+How to write a docker file to build an docker image?
+We need build a docker image by taking another docker image as a base image, so a Dockerfile always starts with FROM directive indicating what is the base image we want to use in building our image
+
+Dockerfile
+-----------
+FROM ubuntu:20.04
+	
+but before writing the FROM directive we can optionally write parser directives as the begining line in the Dockerfile 
+
+There are 2 parser directives supported by docker
+1. SYNTAX
+2. ESCAPE
+
+The parser directives if at all we write should appear at the first-line in the Dockerfile, if we write parser directives anywhere else other than first-line those will be ignored as comments by the docker engine
+
+The parser directives looks like comments in docker file, but those are special instructions which are interpreted by the docker engine 
+syntax
+# DIRECTIVENAME=VALUE
+
+Dockerfile
+-----------
+FROM ubuntu:20.4
+# ESCAPE=` [wrong and will be ignored as comment, because it appears after FROM]
+
+Dockerfile
+-----------
+#comment
+# ESCAPE=` [wrong, it should be the first-line only, even a comment is not allowed before]
+FROM ubuntu:20.04
+	
+Dockerfile
+----------
+
+# ESCAPE=`
+FROM ubuntu:20.04 [wrong, even an empty line is also not permitted]
+
+
+Dockerfile [valid]
+-----------
+# ESCAPE=`
+# SYNTAX=docker/docker-1.0.1
+FROM ubuntu:20.04
+------------------------------------------------------------------------------------------
+1. SYNTAX
+SYNTAX is an parser directive that is used for importing another Dockerfile in which new Syntaxes are defined, so that we can use them aspart of our Dockerfile in building the image.
+SYNTAX help us in importing new directives (frontends), that can be used in writing our Dockerfile in building the image
+
+These parser directives works only with a new docker backed called "build kit" which is more advanced engine in building the docker images
+There are lot of advantages of using new docker backend buildkit
+
+1. detects and skips transfering files from docker build context to the docker engine
+2. we can import external Dockerfiles in adding new directives and features in building images (parser directives are supported)
+3. parallel build independent images
+4. detects and skips unused build stages (layers)
+
+How to enable the buildkit?
+we need to set or export an environment variable to enable buildkit
+export DOCKER_BUILDKIT=1
+	
+#2. ESCAPE
+ESCAPE is used for defining a new symbol as an escape character instead of using "\", which is windows specific/4
+using ESCAPE parser directive we are re-defining the escape character to be used in our Dockerfile	
+
+Dockerfile
+----------
+# ESCAPE=`
+ADD d:`config`db.properties
+
+How to build the docker image?
+#1. be in the Dockerfile directory, then run the below command
+docker image build -t parsedirective:1.0 .
+-t = refers to image name we want to generate for the image it is building
+. = refers to the build context directory pointing to Dockerfile directory location
+
+
+parser directives
+-----------------
+parser directives are special instructions written as part of Dockerfile, will be interpreted by the docker engine specially, these directives looks comments only but has special meaning attached
+There are 2 parser directives are there
+1. SYNTAX
+importing other Dockerfile directives into our Dockerfile while building the image. We can add new frontends/new directives in enhancing the build features 
+# syntax docker/Dockerfile:experiment
+
+2. ESCAPE
+assigning a different escape character than the regular "\" to ensure it works across all the platforms
+# escape=`
+
+by default parser directives will not be interpreted by the docker engine we need to use new backend called "buildkit". how to use buildkit backend?
+export DOCKER_BUILDKIT=1
+-----------------------------------------------------------------------------------------
+#1. FROM baseImage
+always while building an docker image of our own we need to extend our image from one of the base images so that the underlying libraries/binaries required for communicating with docker engine will be available into our image
+FROM is an directive through which we tell docker engine to extend our image on top of base image
+
+syntax:-
+FROM --platform=platformName image:tag
+here platform is optional to be used
+
+FROM --platform=linux/arm64 ubuntu:20.04
+if we dont specify the platform in FROM it takes the platform based on the environment on which we are building the image
+
+The provider/author who publishes the base images might have backed to work on multiple platforms like windows/amd64 and linux/amd64. for both the images the name of the image will be same, he differentiates these images by binding platform while publishing images into docker registry
+
+So, while pulling the image from docker container registry, the containerd will identifies the host machine platform on which we are creating the container or pulling the image based on that it appropriately pulls the right platform image from the registry
+
+if we want a specific platform image to be used irrespective of host, then we can pass --platform flag
+
+FROM [--platform=platform] image:tag
+
+note:-
+always an Dockerfile must and should be started with the begining line as FROM only and can have optionally parser directives (in exceptional case)	
+------------------------------------------------------------------------------------------
+#2. ENV
+ENV is a directive used for defining environment variables to be passed while building the image, so that those variables are available while executing the container.
+	
+For eg during the time of backing the image we might install some software packages like
+jdk, tomcat or maven etc
+unless we configure PATH environment variable pointing to the directory locations of these softwares, we cannot run them directly
+
+So ENV is a directive through which we define static environment variables to be included as part of the image during build
+
+Dockerfile
+-----------
+FROM ubuntu:20.04
+ENV JAVA_HOME=/u01/middleware/openjdk-11-jdk
+ENV TOMCAT_HOME=/u01/middleware/apache-tomcat-9.50.1
+
+in the above docker file we are defining 2 environment variables with default values assigned. instead of hardcoding the ENV variables in the Dockerfile we can pass them as an input while building the docker image
+
+docker image build -t image:tag --env-file=variables.env
+
+variables.env
+---------------
+JAVA_HOME=/u01/middleware/openjdk-11-jdk
+TOMCAT_HOME=/u01/middleware/apache-tomcat-9.50.1
+------------------------------------------------------------------------------------------
+
+
+ENV
+----
+ENV is a directive that is used for defining environment variables, are included into the image at the time of building the image and available during the time of running the container.
+	
+ENV directive is used for declaring the static environment variables pointing to the immutable content of the image like
+setting path pointing to jdk, tomcat, maven etc which are backed as part of the image itself and will not change
+
+Dockerfile
+----------
+FROM ubuntu:20.04
+ENV JDK_HOME=/u01/softwares/java/openjdk-11-jdk
+ENV APP_NAME=nextgensecure
+ENV APP_VERSION=1.0
+	
+In addition we can pass environment variables at the time of running the container as well, which are dynamic inputs that will be used by the containerized application running inside the container.
+For eg an application requires an database details as an input to perform operation, having these values seeded during the image building process requires rebuilding the image everytime there is a change in database configuration as below.
+
+
+
+class ConnectionManger {
+	public Connection getConnection() {
+		Class.forName(System.getProperty("db.driverClassname"));
+		Connection con = DriverManager.getConnection(System.getProperty("db.url"), System.getProperty("db.username"), System.getProperty("db.password"));
+		return con;
+	}
+}
+
+Dockerfile
+----------
+ENV db.driverClassname=com.mysql.cj.jdbc.Driver
+ENV db.url=jdbc:mysql://192.168.0.1:3306/db
+ENV db.username=root
+ENV db.password=root
+
+since these values will change from environment to environment, instead of defining these environment values as part of the image, we can pass these values during the time of running the container
+
+docker container run -e VAR1=VAL1 -e VAR2=VAL2 -e VAR3=VAL3 image:tag
+variables.env
+db.driverClassname=
+db.url=
+db.username=
+db.password=
+	
+docker container run image:tag --env-file=variables.env
+
+How many ways we can pass ENV variables in docker
+There are 2 ways are there
+1. we can define them as part of the image and will be included inside the image during the build and is available while running the container
+recommended: if these environment variables are static in nature
+
+2. while running the container we can pass environment variables as an input
+recommended: if these values are dynamic and are going to change under different environments
+
+we can override the environment variables we defined as part of the image by passing them while launching the container
+------------------------------------------------------------------------------------------
+#3. ARG directive
+------------------
+ARG is an directive used for passing arguments while building the image. We can parameterize the docker image build process through ARG 
+The ARG we passed are only available within Dockerfile only and are not accessible during the runtime while running the container
+
+
+Dockerfile
+-----------
+FROM ubuntu:20.04
+ARG JDK_PKG_NM
+RUN apt install -y $JDK_PKG_NM
+
+
+docker image build -t app:1.0 --build-arg JDK_PKG_NM=openjdk-11-jdk .
+	
+ARG = build-time inputs in parameterizing the docker image builds
+ENV = can be used both during image build also and at runtime also
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
