@@ -1,0 +1,805 @@
+Fundamentals of Networking
+1. How does computers are connected over the network
+2. Machine identification on the network
+3. program identification
+4. How does the data transfer takes places over the network
+--------------------------------------------------------------------------------------------------------
+How does computers are connected over the network?
+For any 2 computers to inter-connect and communicate with each other, the computers should have network interface card (nic) to be available. Either it is inbuilt on the motherboard of the computer (default) or we should additional purchase and add it on to the motherboard of the computer as an peripheral component interface (pci) card.
+  
+The NIC card allows us to plugin an RJ45 socket port inter-connecting both the computers on either of the side, so that the physical data can be transffered from one end to the another.  
+
+How many network interface cards can be attached to a computer?  
+A Machine/Computer can have one or more network interface cards attached, allowing them to interconnect directly to more than 1 computer or more computers  
+
+
+How does one computer/machine on the network can communicate with another computer over the network?
+Whenever a computer drops an datapacket over the network, by default the data would be transmitted to all the computers inter-connected with it. Now if we wish to transmit the data only to one of the computer on the n/w, we should have an identification of the computer on the network.
+  
+Looks like every computer on the network in-order to communicate with other requires an identification name/no through which we can talk to the computer. In networking each computer is identified with an no called "ip address", stands for internet protocol address through which a computer system is identified on the network.
+ip address:  
+  1. a computer/machine can have more than one ip address, depends on the number of network interface cards plugged-in to the computer.
+  2. the ip address is a 32-bit length number divided to 4 octets to identify and locate a computer over the network for eg.. 10.1.34.23
+  3. The ip address of a computer is not fixed, everytime when a computer, connects/dis-connects the ip address will be released and will re-assigned to the computer based on availability of ips. So it can be called as logical address, which is computed at the time of connecting the computer.
+    
+Every computer on the network has 2 types of address.
+  1. Logical address = logical address is nothing but the ip address that would be computed when a computer is connected onto the network.
+    
+  2. Physical or mac address = every network interface adapter (card) is written with an mac address by the manufacturer of the hardward. so that we have mac address available. if we have 2 network adapters attached to our computer, we have 2 mac addresses.
+  These mac address are static address and cannot be changed or always remains same for the network interface card. We can change the mac address of nic, using mac software.    
+In order for a computer to communicate with another computer we need to ip address only.
+  
+Computer Networking
+Every computer inorder to communicate with another computer, they must be inter-connected with each other through a communication medium like a wire/cable. In order to connect the computer through cable, it must have network interface card/adapter on the motherboard of the computer.
+  
+Network interface adapter/card = is a hardware device, that either sits on the motherboard of the computer or an pci card that can be chipped in to the pci slot of the computer and exposes a socket/port to plugin the wire into it.
+  
+In order to plugin a network wire we need to use RJ45 socket into the network adapter port of the computer, so that an connection will be established from the computer on to the network.
+  
+How many network interface adapters/cards can be plugged-in to a computer?
+Based on pci slots available, but we can have one or more depends on the number of other computers to which we want to connect.
+  
+How can a computer can identify itself on the network, or how to transfer the data to another computer on the network?
+By default when a computer drops a datapacket on to the network, it will be transferred to all the computers it is connected to and every receives the data. To send the data to a specific computer on the network we need to use identification of the computer
+
+There are 2 types of identities are there for a computer on the network.
+  1. ip address
+  internet protocol address, which is an logical address generated to a computer when it has connected to the network. it is of 32-bit length divided into 4 octets (each assigned with 8 bits), the format of ip address could range from 0.0.0.0 - 255.255.255.255
+  Usually the ip address of a computer will not be fixed, and will be changing when a computer has been connected and dis-connected from the network.
+  In order to communicate with another computer over the network, a computer should use the ip address of other. (it acts as an primary means of identifying a computer)
+  
+  2. mac address
+  media access control address which is the physical address generated and attached to network interface adapter/card by the manufacturer at the time of manufacturing. Usually these mac addresses are fixed/static and cannot be changed.
+  A computer to communicate with another computer over the network, it cannot use mac address, the only means through which we can identify is "ip address".
+
+How many ip address and mac address are attached to a computer?
+It depends on the number of nic cards attached to the computer, each nic card has an mac and ip address being assigned, so that computer can have multiple ips and mac address.  
+
+How does data transfer takes place between the computers across the network?
+As we discussed earlier the programs running across the 2 machines are going to exchange the data, not the hardware devices. In order to exchange the data over the network, we cannot carry symbolic/character representation of the data over the network, because hardware/physical devices are only capable of representing or carrying the data interms of on/off (which is represented as 0/1).
+  
+Now in order to transfer the data over the network, we need to convert the data into the format of 0/1 then only it can be tranfered over the physical communication channel.
+  
+How to convert symbolic representation of data into binary representation?
+Unless we represent a Symbol or a Character in decimal number, we cannot convert into binary format, the process of converting the Symbol/Character into binary format is called "Encoding".
+The receiver upon recieving the binary number, he should convert the binary to decimal and derive the character/symbol  back from the decimal number, which is called "Decoding"
+  
+If "Encoding" and "Decoding" to take place in the proper way both the parties has to use same decimal representation of the Symbol/Character. So to help in exchanging the data based on the common Symbol-decimal notation, CharSet Encoding Standards are introduced.
+  
+What are CharSet Encoding Standards?
+To help the application programs in encoding/decoding the data while storing/transferring data across the network in a standard Symbol chart, the CharSet encoding standards are introduced. The CharSet encoding standards assign for each character a corresponding decimal value, which has to be followed by both the parties inorder to exchange the data. There are lot of CharSet Encoding standards are available
+1. ASCII
+2. UTF-8
+3. UTF-16
+4. UNICODE
+5. ISO-9001
+
+Why do we need multiple CharSet Encoding Standards, why cant we have one single CharSet standard that supports all the symbols?
+ASCII CharSet encoding standard has provided decimal numbers for all the characters of English Language, Numbers and special characters. it has assigned a numeric value for each character ranging from 0 - 127  
+
+A minimum number of bits required for representing character in ASCII = 1
+  maximum number of bits required = 8  
+  
+(ASCII)  
+SBI0143 -> decimal->binary
+01010011010000100100100100110000001100010011010000110011
+  
+If we want to support more symbols/characters of more languages we need more decimal range 0 - 65535
+utf-16
+  
+based on the language we want to use in storing/transferring the data always choose appropriate charset encoding standard, choosing an inappropriate encoding standard leads to wastage of memory and increases more transfer time of data.
+For eg.. if we are using english language only, use ASCII or utf-8 standard where each character takes only 8 bit representation, instead of choosing others.
+  
+  
+What are CharSet encoding standards, what is the purpose of it?
+CharSet encoding standards are the Symbol charts where they provide for each Symbol/Character a decimal number, so that while storing the data or transferring the data over the network, computer programs can use these CharSet standards in convert data into binary representation.
+
+Why do we need Multiple CharSet encoding standards?  
+There are multiple CharSet encoding standards are available, to support different languages around the world. If we have single CharSet encoding standards, then the more bits required for representing a every character which increases the memory consumption and transfers rates over the network. So to effective utilize the memory and bandwidth capacity there are multiple CharSet standards are introduced. Depends on the language in which we want to represent the data for storing or exchanging, choose the appropriate CharSet encoding standard that results in minimal bit representation of character.
+
+
+What are the reponsibilities or benefits of using a protocol in networking?
+1. Even though the communication channel is shared among multiple computers, the protocol gives an illusion, that every 2 computers that are communicating has their own dedicated channel, by dividing the communication channel logically, so that no 2 people data will collide with other data, and information that is sent by sender will be recieved by the Reciever intact.
+  
+2. When a sender sends the data, even though multiple computers are available on the network, only the receiver receives the data, that guaranteed delivery of data only to the intended receiver will be taken care by protocol
+--------------------------------------------------------------------------------------------------------
+From the above we can understand we need a protocol for letting the computers and programs to communicate with each other over the network. That is where OSI Model layer was introduced.
+  
+OSI Model Layer = Open System Inter-Connection standard, the provided set of rules/guidelines enabling any 2 programs running on any platform to communicate with each other and exchange the data over the network.
+  
+OSI Model Layer protocol comprises of both Application Protocol and Tranport protocol within it. To help us in easily understanding and exchaning the data, it has defined 7 layers.
+1. Application Layer
+2. Presentation Layer
+3. Session Layer
+4. Tranport Layer
+5. Network Layer
+6. Datalink Layer
+7. Physical Layer
+
+
+1. Application Layer protocol
+The Server program is capable of performing multiple operations, each operation requires uniquely the data as an input perform operation using the data and returns the output.
+  
+Now when the client program is trying to communicate with server program on the network, it should pass data and operation the server program should perform using the data as well, 
+then only server program will know what operation to be performed with that data and can return the output
+
+
+What is protocol, why do we need to use it?
+protocol is set of rules or guidelines we should follow in accomplishing or acheving an outcome. network protocol is rules/guidelines machines or program has to follow inorder to exchange the data effective between them over the network.
+  
+There are 2 types of protocols are there
+1. Application Protocol
+These protocols are used by end-end application which are exchanging the data between them. They define messaging structure and semantics over which data should be exchanged, so that both the application can understand the data easily.
+  
+2. Transport Protocol
+These defines rules for transmitting the physical bits of data over the network
+
+OSI Model Layer
+---------------
+International Standard Organization (ISO) has introduced OSI Model Layer protocol (1984) in defining the rules in exchanging the data between computer/application over the network.
+OSI stands for Open System Inter-Connection Standard, using which any 2 computers/applications running on any platform can exchange the data over the network.
+  
+The OSI Model Layer protocol has comeup with 7 layers, which we can think of stages of data transfer over the network and these layers has to be executed in sequential order
+  top-bottom: sender 
+  bottom-top: receiver
+  
+1. Application Layer
+2. Presentation Layer
+3. Session Layer
+4. Transport Layer
+5. Network Layer
+6. Datalink Layer
+7. Physical Layer
+--------------------------------------------------------------------------------------------------------
+#1. Application Layer
+The rules/guidelines that any 2 application has to follow in exchanging the data in an understandable manner is defined at Application Layer.
+    
+The programs communicating over the network can be classified into 2 types
+1. Client program
+2. Server program
+
+Client program want to send the data to the server program over the network asking him to perform operation on the data and give the outcome of the operation back. 
+Now if client program sends the data to the server program, how can the server interpret the data and perform operation?
+For eg.. 938310/09/2021avaialability
+if the client program is sending trainNo, travelDate, and operation to be performed as availability in the above format, how can the server program interpret the data and perform the operation, it cannot because the data is not in understandable format.
+  
+So to make the data exchange effective these 2 programs has to define rules in terms of
+  1. Messaging Structure
+  2. Semantics
+Then the server and client program can interpret the data and exchange with each other, so that communication will become effective.
+
+The rules that are defined by both these applications interms of message structure/semantics are called Application Layer protocol.
+  
+From the above we can understand if we built a program that want to communicate over the network then the program should have below:
+  1. port no
+  2. application protocol defined = message structure and semantics on how to exchange the data.
+    
+There are standard application layer protocols are there in the Computer Science Engineering world, why?
+There are lot of common application we use across, in the internet world like
+  1. Email Exchange
+  2. File Transfer
+  3. Browing web
+  
+Email Exchange:
+People can send and receive email using the email clients and email servers, across the email providers as well. unless we have standard message structure and semantics being defined people cannot exchange the emails using any client and any provider. So there email exchange protocols are defined.
+  1. SMTP = Simple Mail Transfer Protocol
+  2. POP = post of office protocol
+  3. IMAP = Internet Mail Access Protocol
+  
+All the mail servers are designed based on the above protocols in (exchanging the data), so that everyone can send and receive emails irrespective of the provider in which you have email account. because every server is using the same protocol stack.
+
+Application protocol:
+Any 2 network applications wants to exchange the data over the network, they need to define standard message structure and semantics, so that those 2 applications can follow those rules in exchanging the data in an understandable format which is called "application protocol".
+  
+In the internet world, there are lot of applications being used to carry our daily activities like
+1. browsing web 
+HTTP protocol is the internet standard protocol used for browsing the web pages over the world wide web.
+(Hyper text transfer protocol)
+
+2. exchanging emails
+There are multiple protocols available for exchanging the emails between the client and server
+smtp = simple mail transfer protocol (initial protocol with less features)
+pop3 = post office protocol
+imap = internet mail access protocol (advanced)
+
+3. file transfer (ftp) = for exchanging files between client computer and server computer
+ftp = file transfer protocol
+
+4. remote desktop = to connect another computer over a network connection
+(rdp) = remote desktop protocol
+
+
+For each of these application types to ensure vendor/platform interoperability there are pre-defined application protocols defined for each of these applications
+For each the server programs that works on these standard protocols there are pre-defined port nos fixed to facilitate users to access the programs from client without using the port no
+
+FTP: 20/21
+SSH: 22
+SMTP: 25
+HTTP: 80
+HTTPS: 443
+POP3: 110
+IMAP: 143
+RDP: 3389
+---------------------------------------------------------------------------------------------------------
+Any 2 programs want to communicate over the network they need standard application protocol (message structure and semantics). We can classify these 2 programs into server and client program
+server program: runs on a port number
+client program: connects to the server by specifying ip:port 
+  
+  
+Different programs wants to exchange different data and has different operations to be performed, so every 2 programs should define their own application protocol to communicate.
+There most commonly used applications are there in internet world, for them the standard application protocols are defined to achieve interoperability.
+  Web Browsing (HTTP) (default: 80)
+  Exchaning Email:
+    SMTP: 25
+    POP3: 110
+    IMAP: 143
+  File Transfer (FTP) (default: 20/21)    
+  Remote Desktop (RDP) (default: 3389)    
+
+If client wants to talk to the server program it has to use URL format which contains
+schema://ip:port/resource
+
+schema: protocol to be used for communicating, so that client program by looking at schema will create messages based on the protocol and send it to the server.
+  
+OSI Model Layer = Introduced by ISO, which will enable programs to exchange the data over the network independent of platforms on which the programs are running.
+It has been divided into 7 layers
+1. Application Layer
+2. Presentation Layer
+3. Session Layer
+4. Transport Layer
+5. Network Layer
+6. Datalink Layer
+7. Physical Layer
+
+#1 Application Layer = here it defined Application protocol, helping the application standardized the message structure and semantics over which the application has to exchange the data in understandable format.
+Each application can define their own standards overwhich it want client programs to communicate, so they can be many application protocols specific to application.
+  
+The Internet standard has identified certain applications which are commonly used as part of daily life and standardized protocols for each type of application enabling vendor/platform interoperability.
+
+Web, HTML           = HTTP (80)
+File Transfer       = FTP  (20/21)
+Exchange Email
+                    = SMTP (25)
+                    = POP3 (110)
+                    = IMAP (143)
+Remote Desktop app  = RDP (3389)  
+Secure Shell        = SSH (22)
+
+No 2 computers can exchange the data, we need applications to perform operations. For most common activities there are applications build on standard protocols.
+  If our application works based on HTTP protocol in serving web pages: HTTP Server and HTPP Client prog
+                                    FTP protocol in uploading/downloading files: FTP Server and Client prog
+                                    SMTP,POP3,IMAP, for email exchange: Exchange Server and Mail Client prog
+                                    
+How does the client should access the server program?                                    
+The client always has to build URL in order to access the server program which comprises of the below
+schema://host:port/resource
+http://localhost:8081/application
+--------------------------------------------------------------------------------------------------------
+#2 Presentation Layer [REFER: 10-AUG-2021-PRESENTATION-LAYER IMAGE]
+Application Layer is responsible for structuring/preparing the data based on messaging standards agreed by both the application, but the data is not in a transmittable format.
+Here comes Presentation Layer, it is responsible for presenting the data to lower-level layers allowing it to be transmittable. There are 3 responsibilies carried by Presentation Layer.
+  2.1 Data Conversion
+  2.2 Compression/De-Compression
+  2.3 Encryption/DeCryption
+  
+#3 Session Layer
+End to End application communication will be taken care by Session Layer, it performs 2 responsibilities
+1. Authentication and Authorization
+2. Session Management
+
+
+1. Application Layer
+2. Presentation Layer
+3. Session Layer
+4. Transport Layer
+5. Network Layer
+6. DataLink Layer
+7. Physical Layer
+
+1. Application Layer
+defines standard messaging structure and semantics over which both the applications has to communicate
+
+2. Presentation Layer
+It presents the data to the lower-layers in sender side in transmittable format and receives the data and presents to the Application Layer to consume. It performs 3 responsibilities
+  2.1 Data Conversion = converts character representation of data into bits/bytes
+  2.2 Data Compression/DeCompression = bit reduction, to transfer quickly over the network
+  2.3 Data Encryption/DeCryption = securing the data
+  
+3. Session Layer
+End-To-End application communication will be managed by Session Layer. it does 2 responsibilities
+  3.1 Authentication/Authorization
+  3.2 Session Management
+  
+While transmitting the data, it will be broken down into smaller data packets for 2 reasons
+  - avoid network congession and blocking other computers in using the network
+  - retransmitting the lost data will be easy, we can retransmit the data packet we lost rather than the whole data again
+  
+  3.1 Authentication and Authorization
+    Authentication: identifying the user who is trying to access the application in order to grant access. Client has to produce an username/password while accessing the application, so that server program can validate the username/password and allow the user to access the application.
+      
+    Authorization: is a role based access mechanism, there are multiple roles of users within the application exists, every user cannot perform all the operations.
+    identifying the user role granting the permission to perform the operation is called authorization.
+      
+    Session layer helps the applications in keeping track of authentication/authorization information by storing at the session level, so that client programs dont need to reproduce the authentication data each time while trying to access within the Session.
+      
+  
+  3.2 what is session management, what does it do?
+    3.2.1 identify the data packets received and route them to the right application at the received end.
+    3.2.2 resequencing the data into correct order to build back the original message will be takencare
+    3.2.3 keeps track of number of data packets transmitted, received and pending end-end  
+------------------------------------------------------------------------------------------------------
+The above three layers we discussed are related to application implementation not related to data transfer.
+    
+
+#4 Transport Layer
+The transport layer performs 3 responsibilities
+1. Segmentation
+2. Flow control
+3. Error control
+
+
+How many layers are there in OSI Layer model?
+There are 7 layers are there
+1. Application Layer:- Message Sematics and Structure to allow applications to exchange the data in understandable format
+2. Presentation Layer:- 3 Responsiblities
+  2.1 Data Conversion
+  2.2 Data Compression/DeCompression
+  2.3 Data Encryption/DeCryption
+3. Session Layer  = End-End communication between the applications are managed by Session Layer
+  3.1 Authentication/Authorization = Keeps track of the authentication/authorization role of the user information of the users accessing.
+  3.2 Session Management
+      - keeps track of the data like how many data packets has been transmitted, still how many are pending
+      - which data packets belongs to which application at receiver side
+      - reconstructing the original message based on sequence order
+-----------------------------------------------------------------------------------------------------
+
+4. Transport Layer = It performs 3 responsibilities
+  4.1 Segmentation = takes the data from Presentation Layer, breaks them into smaller packets and assigns port no of the receiver program and sequence no to assemble the message in the proper order 
+  The process of breaking the data into packets by assigining port and sequence no is called "Segmentation"  
+  4.2 Flow Control = Instructs the sender to slow down the data transfer rates when the reciever is slow network connection receiver to avoid lost of data 
+  4.3 Error Control = computes and adds checksum bits to the data segment, allowing the receiver to detect the faulty or lost data segments and instructs the sender to resend
+  
+5. Network Layer = Takes care of transmitting the data from a computer to another network
+  5.1 Logical Addressing
+  5.2 Routing
+  5.3 Path Determination
+#4 Transport Layer 
+1. Segmentation = it breaks the data into smaller chunks and attaches the port no of the receiver(server) program and sequence no to re-construct the message at the receiver side. The process of binding portno along with sequenceno to a data packet together is called a segment
+  
+2. Flow Control = It slows down the sender in transmitting the bits of data where the reciever is running on low internet speed.
+
+3. Error Control = the sender while sending the data would add checksum bits helping in detecting the bad/corrupted data at the receiver side and allows to re-transmit the lost packets
+
+#5 Network Layer = Responsible for transferring the data from one computer network to other network computer. Router devices operate at the network layer.
+There are 3 responsibilities performed by Network Layer
+1. Logical Addressing = It takes the segment from transport layer and binds the ip address of the source and destination computer, which is called "ip packet" or "data packet".
+2. Routing = Routing is the technic of moving the data packet from one network computer to the other computer of another network. Routing will be perform based on the following
+    2.1 picks the receiver or destination computer ip address
+    2.2 Router will computers the network address of the other computer
+    2.3 based on the network address the data packet will be moved to the appropriate router/gatway of the other network.
+  
+3. Path Determination = There are multiple intermediatries between the source and the destination, the network layer identifies the shortest path through which data packet has to moved to get it received quickly at the destination computer.
+  
+There are 2 protocols that works at network layer
+tcp/ip = Transmission control protocol (feedback to the sender) (reliability)
+udp = User Datagram protocol (no feedback) (faster transfer speeds can be achieved)
+
+
+Network Layer
+--------------
+Network layer receives segment from transport layer and converts into data packet and transmits the between the computers across the network. There are 3 responsibilities carried by Network layer.
+  1. Logial Addressing
+  takes the segment adds sender and reciever ip address which is thereby called "data packet" or "ip packet".  
+  2. Routing
+  Determines the network to which the data packet should be routed based on network address derived from the ip address of the destination.  
+  3. Path Determination
+  There are multiple paths in sending the data from source to the destination which are called intermediatories. The network layer identifies the shortest-path by which the data can quickly recieved by the receiver which is called "Path Determination"
+  
+  
+#6. DataLink Layer
+Datalink layer is a software embedded as part of the network interface card, programmed by the manufacturer and shipped to us. It is responsible for making the data transmittable over the physical channel. While transferring the data between the hosts/computers of the same network, then datalink layer participates, but while routing the data between the networks, that datalayer has no presence.
+  
+There are 3 responsibilities of datalink layer
+1. Physical Addressing
+2. Media Access Control
+3. Error Control
+
+6.1 Physical Addressing
+Here the datapacket will taken as an input and attaches the source and destination computer mac address, in addition adds some head/tail bits and makes it as a data framework.
+  
+6.2 Media Access Control
+It is responsible for making the data transmitted over the physical channel to be accessible by the higher-level layers of the OSI Model. It frames the data and unwarps the data between the medium of communication to make the data transferrable across various types of transmission channels.
+
+6.3 Error Control
+There are 2 types of error control done by the datalink layer
+  6.3.1. Collision detection:- Datalink layer keeps an eye on network channel to identify the line is busy or available for transmission to avoid collision while sending the data over the channel.
+  
+  6.3.2. Fault data frames: Due to hardware failures/limitations sometimes the frames are received in corrupted state, So the datalink layer while transmitting the dataframes over the it adds some random bits which helps in detecting the corrupted frameworks and requests for re-transmission.
+    
+7. Physical Layer
+The phsical layer takes the bits of data converts into the relevant format based on transmission media like wired (Singals), Fiber (light waves) and wirelss (radio signals) and transmits the data over the channel. The actual data transfer takes place at this layer.
+-----------------------------------------------------------------------------------------------------
+1. Application Layer
+defines message structure and semantics to make application exchange the data in understandable format
+
+2. Presentation Layer
+At the sender it presents the data to lower layers from the application in transmittable format and at receiver side presents the data to application in application format.
+  2.1 Data Conversion: (CharSet)
+  2.2 Data Compression and DeCompression: bit reduction (quick data transfer)
+  2.3 Data Encryption and DeCryption: data security
+
+3. Session Layer (no way connected to transmission data), rather it is responsible session management between the application
+  3.1 authentication and authorization
+  it keeps track of users authentication and authorization information and grants access to the application.    
+  3.2 session management
+  it keeps track the data packets that are transmitted
+  reorders the received data packets to build the original message
+  and routes the data packets to the right application at the destination.
+
+4. Transport Layer
+  4.1 segmentation: breaks the data into smaller chunks and attaches portno and sequence no forming it as segment
+  4.2 flow control: slows down the sender in transmitting the data when receiver is running on slow internet line
+  4.3 error control: attaches checksum bits to the original message, to identify in corrupted data being received at destination
+  
+5. Network Layer  
+  transmitting the data between the computers across the network
+  5.1 logical address: attaches source and destination ip address to the segment which is called "data packet"
+  5.2 Routing: routes the data packet between the networks
+  5.3 Path Determination: computes the shortest path for data transmission
+  
+6. Datalink layer
+  responsible for moving the dataframes between the computers within in the network
+  6.1 physical address: attaches source and destination mac address along with some head/tail bits calling it as "data frame"
+  6.2 media access control: converts the dataframe into a format that can be transmittable over the medium of transport
+  6.3 error control
+      6.3.1 collision detection = avoids collision over the network channel
+      6.3.2 fault data = adds additional bits to the frame so that we can recieved corrupted frame and ask for re-transmission
+7. Physical layer: converts bits into signals so that those can be transmitted over the medium
+
+  
+  
+OSI Model layer
+----------------
+Open System Inter-connection standard is protocol used for interconnecting the computers of hybrid environment. It comprises of 7 layers
+1. Application Layer
+    Messaging Structure and semantics are established to ensure both the applications can exchange the data meaningfully
+2. Presentation Layer
+    Presents the data to and from the top and bottom layers in a transmittable format
+    2.1 Data Conversion
+    2.2. Data Compression/DeCompression
+    2.3 Data Encryption/DeCryption
+3. Session Layer
+    End-To-End application communication will be taken care
+    3.1 Authentication/Authorization
+    3.2 Session Management
+4. Transport Layer
+    4.1 Segmentation
+    4.2 Flow Control
+    4.3 Error Control
+5. Network Layer
+    Responsible for tranmitting the data from one computer to another computer of other network
+    5.1 Logical Addressing
+    5.2 Routing
+    5.3 Path Determination
+6. Datalink Layer
+    6.1 Physical Addressing
+    6.2 Media Acess Control
+    6.3 Error Control
+        6.3.1 Collision detection
+        6.3.2 Fault data
+7. Physical Layer
+    Responsible for converting the bits representation into transmittable signal format
+-----------------------------------------------------------------------------------------------------
+Network Toplogies
+The way computers are inter-connected over the network is called "Network Topologies"
+      
+There are 2 types of network topologies are there
+1. Logical Topology = How does the data moves between the computers over the network
+2. Physical Topology = How does the computers are physically arranged and interconnected with the organization
+
+Now let us try to understand how many ways we can inter-connect the computers over a network (Physical Toplogies)
+There are 5 network topologies are there
+1. Bus Toplogy
+2. Ring Topology
+3. Star Topology
+4. Mesh Topology
+5. Hybrid Topology
+
+#1 Bus Topology
+A backbone cable is laid through out the entire network where all the computers are tapped or pierced into the backbone cable establishing interconnection with others. A computer on the network in order to transfer the data to other computer will places the data packet on the backbone cable, where data packets moves from one end-to-another end sequentially through all the hops connected to that backbone cable.
+  
+Each computer gets a chance to see the datapacket and check whether it belongs to him or not, otherwise will retransmits the data by placing onto the backbone cable, that is how data moves here. The data moves in uni-directional only in bus network.
+  
+advantages:-
+  1. low cost in establishing the network
+  2. quick to setup the network 
+  3. troubleshooting and fault detection is easy.
+
+dis-advantages:-
+  1. Not suitable for interconnecting large number of computers onto the network, if more computers are connected, there is high chance of signal degradation or loss of data due to which network failure arise.
+  2. less secured
+  3. if more computers on connected on to the network, there is high chance data collision takes place
+  4. If the backbone cable was broken, then the entire network will goes down.
+    
+Bus topology is suitable for only intern-connecting limited setup of computers only (like a homenetwork) where the network traffic is very less. It is not suitable for inter-connecting large computers over a office network.
+
+#2 Ring Topology
+Ring toplogy each computer is inter-connected to its adjacent computers thus forming an ring like structure. Each computer requires 2 network interface cards in establishing the network, the data flows in clock-wise uni-direction only. as the data moves in uni-directional, minimum chance of data collision arises.
+  
+If the 1 Node on the network has to transfer the data to Nth node on the network, the data has to move through all the computers between 2-n-1, which slows down the data transfer rate. To overcome this problem dual ring topology was introduced.
+  
+In dual ring each computer is connected to its adjacents with 2 wires instead of one, where 1 wire is moving the data in clock-wise direction, other one used for anti-clock wise direction, now data can be moved in both the directions thus enabling high rate of data transfer. With the dual ring the network will be more robust.
+
+advantages:-
+  1. we can create larger network of computers.
+  2. no data collisions
+  3. we can quickly add a new computer or remove an existing computer from the network.
+  
+dis-advantages:-  
+  1. cost of setting up the network is high
+  2. if one node goes down all the nodes after this node becomes unreachable, since data transfer happens in clock-wise uni-directional
+  3. trouble shooting the network failures and fault detection takes lot of time
+  
+#3 Star Topology
+
+All the computers on the network are inter-connected to a central device called "hub". A computer in-order to send the data to another on the network, he has to send the data to the central hub, where the hub takes care of forwarding the data to all the computers connected on to the network, thus enabling data transfer. We can use duplex cables, where it contains 2 wires within the cable, one can be used for sending the data from hub to computer and another one for receiving the data, so that we improve data transfer rates within the network.
+There is zero chance of data collision takes place, as all the data receives by the hub and will managed by hub before forwarding the data.
+  
+advantages:-
+  1. very cheap in setting up the network, because minimal cables and nic cards are required in establishing the network
+  2. quick to setup the network
+  3. adding and removing a computer on the network is easy and will not impacts the other computers on the network
+  4. If one node goes down only that computer cannot be reachable, but it has zero impact on the network.
+  5. no data collisions
+  6. troubleshooting and fault detection is easy because hub will tell us which link went down.
+  
+dis-advantage:-
+  1. if hub goes down, the entire network will be down
+  
+#4 Mesh Topology
+Every computer on the network inter-connect with n-1 computers on the network forming a mesh structure. This network is considered as the most robust network, as if one link failure will not leaves the node not reacable, because always we have alternate paths in reaching to the note. More suitable for inter-conneting wan networks like interconnecting the isp servers across the cities.
+  
+advantages:-
+  1. robust network
+  2. high data transfer as direct line internconnecting the computers are there
+  3. no data collision
+  
+dis-advantages:-
+  1. quite expensive as more cables and nics runs through the network
+  2. very complex to setup and time consuming
+  3. troubleshooting and fault detection is very difficult
+  4. only suitable for inter-connecting the wide area networks (WAN) only.
+    
+    
+#5 Hybrid Toplogy
+Inter-connecting multiple different topology networks together is called a "Hybrid" Topology
+------------------------------------------------------------------------------------------------------
+Network devices
+In order to interconnect computers to a network, we need to use devices establishing the network which are called "Network Devices".
+There are 6 types of network devices are there
+1. Repeators
+2. Hub
+3. Switch
+4. Bridge
+5. Router
+6. Modem
+7. Firewall (network security device)
+    
+
+    
+  
+There are 5 types of network topologies are there
+1. Bus Topology = backbone cable where all the machines are connected to the backbone
+2. Ring Topology = each machine is connected to its adjacent forming a ring
+3. Star Topology = all the devices are connected centrally to hub device
+4. Mesh Topology = each device is connected n-1 devices on the network thus forming a robust network
+5. Hybrid Topology = multiple topology networks are inter-connected through hybrid.
+------------------------------------------------------------------------------------------------------
+What are network devices, and how do they work?
+In a typical network, if we want to interconnect computers together, we have to run through cables and nic connecting n-1 computers on the network. if we want to interconnect 10 computers on the network then we should run 10-1 (9) nic cards and cables through each computer,
+Now the cost of setting up the network is very high and takes more time. Trouble shooting the network is very difficult. This type of network model is suggested for WAN networks only.
+  
+To save us from the above problems there are network devices can be used, in interconnecting the computers.
+These are hardware devices/peripherals used for establishing and inter-connecting computers together, which are called network devices.\
+
+What are network devices, what is the purpose of them?
+Network devices are used for inter-connecting the computers to form a network. There are 7 types of network devices are there
+1. Repeater
+2. Hub
+3. Switch
+4. Bridge
+5. Router
+6. Firewall
+7. Modem
+
+1. Repeater = Repeater amplifies or regenerate the signals in transmitting the data between 2 distant computers within a network
+
+2. Hub = Hub is used for interconnecting the computers to form a network, using hub we setup star topology. Hub works at Physical layer of the OSI Model, where it receives the datapacket interms of signals and copies to all the ports of the hub. Now every computer upon recieving verifies the datapacket belongs to it or not, if not discard, otherwise use it. The bandwidth consumption is very high incase of Hub and results in poor network speed.
+There are 2 types of hubs are there
+1. Passive Hub = no power, no signal regeneration
+2. Active Hub = powered devices, should be plugged-in. receives the signals amplifies or regenerates and copy to all the ports
+
+3. Switch
+
+how many network devices are there ?
+7 networking devices are there
+1. Repeater = extender
+2. Hub      = star network
+  2.1 passive
+  2.2 active
+  
+3. Switch   = Intelligent Hub, works at datalink layer (routes the packets to the ports based on mac address and used for only lan networking)
+
+4. Bridge   = interconnecting 2 different networks, 2 ports. Copies the data packets received from one port to the other thus forwarding the data to another network.
+
+5. Router
+6. Firewall
+7. Modem
+------------------------------------------------------------------------------------------------------
+5#. Router
+
+Routers are used for inter-connecting the networks of computers together. Unlike a bridge with 2 port, a Router has multiple ports, so that we can plugin multiple networks forming a big network.
+Routers are intelligent devices than bridges and they operate at network layer all the traffic/data that it has received will be forward to only the corresponding network by inspecting the network address out of the ip.
+
+The Routers has routing table, we populate rules enabling how does the data should between the networks. Now we can configure rules restricting how the data has to be moved across the computers of the different network.
+
+Router:-
+Router is used for inter-connecting multiple networks together. unlike bridge a router has more number of ports so that we can multiple networks together and its an intelligent device that only forwards the traffic to the corresponding network only. It works at network layer and identifies the network address to which datapacket has to be sent to based on ip address.
+
+The advantage of using routers is, the user can configure routing rules within routing tables through which we can restrict or control the network traffic between the computes of the network.
+-------------------------------------------------------------------------------------------------------
+Firewall
+Firewall is used for controlling or restriction or monitoring the network traffic patterns on a computer. It keeps track of the programs and the ports there are opening on a computer or a network. help us in making decision of should a program be allowed or not in running on a port.
+  
+There are 2 types of firewall are there 
+1. Hardware firewall = These are special network devices equipped with firewall software installed with them and attached to the network, so that every network traffic will pass through the firewall controlling and securing the network. we can manage large group of computers on a network centrally by installing a hardware firewall on the network.
+
+2. Software firewall = The software firewalls are inbuilt programs that are shipped most of the time by the operating system, which can be used for controlling the network traffic. These works local to the computer on which those are installed.
+------------------------------------------------------------------------------------------------------
+#7. Modem
+Modem is a device which is capable of performing modulation and demodulation. help us in connecting the computers over the dial-up networks.
+
+7. Modem
+Modulation and De-Modulation of signals from analog to digital will be done through modem, usually used while connecting over dail-up network
+-----------------------------------------------------------------------------------------------------
+ip addressing
+---------------
+ip standards for internet protocol address, for each computer connected over the network we need ip address to identify and communicate over the network.
+
+
+What is ip address, why do we need it?
+ip stands for internet protocol address, used for identifying and communicating with a computer on a network. ip address is a logical address that will be assigned to the computer upon connecting to the network.
+  
+There are 2 types of ip address are there
+1. ipv4 = it is of 32-bit in length and can accomodate a max of 4.2 billion computers on the network
+2. ipv6 = 128-bit length which is written in hexa-decimal format and can accomodate 2^(128)-2, where we never run out of ip range
+
+ipv4:
+The 32-bit ip address has been broken down into 4 octets each of 8-bits in length separated by "." period between, to support hierarchial addressing model. So we group related computers into one network and manage separately from others. From this we can understand an ip address comprises of 2 types of addresses.
+  1. network address = few bits/octets are assigned within an ip address as a network address, to identify the related group of computers as one network.
+  2. host address = the unique/sequential numbers assigned to the computers within the network address to locate it uniquely is called host address.
+  
+In 4 octets if we assign 3 octets as network address and 1 octet as host address how many hosts can be there within a network.
+  2^8 = 256 hosts can be there in a network
+  2^8 (256) * 256 * 256 = networks can be created using 3 octets
+  
+In our organization we want to create 3 different group of networks like
+  - Financial department = one network
+  - Hr department = another network
+  - Employee = separate network
+So that we can restrict/impose traffic restrictions to the group of people working. For eg..
+  Finance department = should not be allowed to access public internet websites, because of confidentiality
+  Finance and HR can allow to access Employee data 
+  Employee = can have limited time in accessing internet, with restrictions enforced.
+To help us in managing the hosts of different departments we need to break ip address into 3 networks using hierarchial model.
+  
+192.168.1.      (1-255)  = Finanace
+192.168.2.      (1-255)  = HR
+192.168.3.      (1-255)  = Employee (3000)
+----------      -------
+Network address  host address
+
+How many hosts can be part of one network?
+it depends on how many bits we allocated for network address and host address. For eg if we allocate 3 octets for network address, the in each network we can have only 255 hosts only. Lets say we have 3000 employees working within our organization, where we want to interconnect all their computers as into one network, then allocate 2 octets for network address and 2 octets for host address.  
+So that we can create 65k networks and in each network we can have 65k hosts approx.
+  
+Now we can understand depends on the size of the network we need to allocate host/network bits in an ip address.
+Given an ip address how can we identify what is the network address and what is the host address to route the data packet to the right computer of a network.
+192.168.1.2 = network address here and host address?
+by looking at ip we cannot identify because the bit allocation is not fixed. To overcome this problem ip address classes are introduced.
+
+Classful ip addressing
+The internet protocol standard has introduced ip classification to help us in identifying which bits are allocated to network address and which bits are allocated to host address.
+There are 5 classes of ip address are there which are A, B, C ,D and E.
+  
+What is ip address, why do we need to use it?
+ip address stands for Internet protocol address which is used for identifying a computer over the network in order to communicate with it.
+  
+There are 2 types of addresses are there within an ip address.
+  1. Network address
+  2. Host address
+because of its hierarchial distribution
+Given an ip address how can we identify what is the network address and host address within that network?
+By default we cannot identify which bits/octets are allocated for network and host, so to help us in distingushing ip classes are introduced.
+Ip address are classified into 5 groups as A, B, C, D and E. given an ip address we need to identify which class it belongs to and based on which we need to derive number of network and host bits by using which we can compute network address and host address.
+  
+To determine the ip address falls into which class we need to see higher 3 bits in the first octet.
+First Octet
+0   - 126      -         CLASS A      -  Network bits: 8    and host bits: 24
+128 - 191      -         CLASS B      -  Network bits: 16   and host bits: 16
+192 - 223      -         CLASS C      -  Network bits: 24   and host bits: 8
+224 - 239      -         CLASS D      -  no bit allocations, used for multicasting
+240 - 255      -         CLASS E      -  experimental and reserved for future usage
+
+127.* = loopback ip address, a host can reach by itself by using the first-octet value as 127.
+8 bits are allocated to host address means we can have only (2^8) - 2 address only. 2^8 = 256 - 2 = 254 host address are available, because
+1. always the starting host is allocated to network/router
+2. the higher number 255 is used as broadcast address
+
+broadcast? = if a computer within a network want to send the data to all the other computers of the same network then it is called broadcasting.
+in every class if we use highest value for host bits then the ip will become broadcast ip.
+For eg.. in Class C address the broadcast ip address will be (192-223).x.x.255
+
+Class D = Multicast, which means if we want to send the data to all the computers of all the networks we are connected with then we use multicast ip range.
+
+How to identify the network and host address from an given ip address?
+To help us in quickly computing these the subnet mask has been introduced routers will use subnet mask in deriving the host and network addresses from the given ip.
+  
+Subnet mask 
+Class A: 11111111.00000000.00000000.00000000
+Class B: 11111111.11111111.00000000.00000000
+Class C: 11111111.11111111.11111111.00000000
+substitute the Subnet mask based on the class of the ip and do a AND operation with ip address and subnet mask to derive the network address and host address.
+  
+How to determine the network address and host address for a given ip address?
+the ip classification has to be used and identify the relevant subnetmask that has to be used for computing network and host address of the ip address.
+0   - 126 - CLASS A = 8   bits network, 24 bits host, subnetmask: 1111111.00000000.00000000.00000000
+128 - 191 - CLASS B = 16  bits network, 16 bits host, subnetmask: 1111111.11111111.00000000.00000000
+192 - 223 - CLASS C = 24  bits network,  8 bits host, subnetmask: 1111111.11111111.11111111.00000000
+224 - 239 - Class D = Multicast addressing
+240 - 255 - Class E = reserved for future usage
+
+Now to identify network address we need to take subnet mask based on ip classfication and do a binary AND to find it.
+192.168.11.23 = Class C ip address so 24 bits are allocated to network and 8 bits are allocated to host so represent ip adresss and subnet mask in binary format and do a BIT AND operation to find network address.
+  
+11000000.10101000.00001011.00010111
+11111111.11111111.11111111.00000000
+--------------------------------------
+11000000.10101000.00001011.00000000    = 192.168.11.0 = network address
+                                         23 is the host address
+------------------------------------------------------------------------------------------------------
+The ip address can be assigned to the computers in 2 ways
+1. static ip
+2. dynamic ip
+
+1. static ip binding: if we have less no of computers to be connected within an network, then the network administrator can manually configure network adapter settings in binding ip, subnet mask and default gateway along with dns configuration. So the computer even after reboot also persist the same ip.
+  
+2. dynamic ip binding: within an organization we have large no of computers to be connected within one network, configuring each of these computers with network adapter configurations is practically impossible, so network administrators takes the help dhcp server.
+  
+Dynamic Host Configuration Protocol (DHCP Server): the network administrator configures ip range, ip reservation, default gateway and dns server configurations. Whenever a new host has been joined on to the network, the DHCP Server propagates network setting to the host by configuring with an ip and other values as well.
+-----------------------------------------------------------------------------------------------------
+CIDR Notation (Classless Inter-domain routing)
+  
+In Class C ip addressing 24 bits are allocated to network and 8 bits are allocated to host. Now we can create 255*255*255 networks and in each network we can have 255-2 (253)  hosts connected.
+For eg. I want to connect 2500 hosts within a network, now which ip class should i choose in allocating ip address.
+we should use Class B, where 16 bits are network address and 16 bits are host address.
+networks: 255*255 = 65k
+hosts: 253 * 253 = 65k
+
+For 2500 hosts to be connected how many bits are required, we need just 12 bits remaining 4 bits are unused.
+  
+Now lets say the required is we want to 2500 hosts in each network and we want to establish 75k networks can you help me how to achieve this in classful ip address?
+  
+If we use Class B ip address, we can allocate only 16 bits for network which will allows us to create 65k networks only and remaining bits are allocated to host 16bits using which we connect another 65k. if we want only 2500 hosts per network, we can allocate 12 bits and remaining 4 bits we can add to network, this is not possible in class-full ipaddress and the bits are wasted.
+  
+To overcome the above limitation the CIDR notation has been introduced and almost everyone is using CIDR notation in allocating the ip address.
+
+  
+CIDR Notation
+CIDR Stands for Class-less inter-domain routing. with a ip classification there is no flexibility of allocating network and host bits based on our requirement, due to fixed allocation schema few bits are being left as unused.
+  
+To overcome the problem CIDR notation has been introduced. While working with CIDR notation the ip address is always represented with ip/networkbits pattern as shown below.
+  
+192.168.45.32/22 = here the notation indicates how many bits are allocated to network address. Now we need derive the network address and host address by computing the Subnet mask.
+
+
