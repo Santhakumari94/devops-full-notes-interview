@@ -870,6 +870,981 @@ docker image build -t app:1.0 --build-arg JDK_PKG_NM=openjdk-11-jdk .
 	
 ARG = build-time inputs in parameterizing the docker image builds
 ENV = can be used both during image build also and at runtime also
+ENV directive
+--------------
+ENV directive is used for defining environment variables within the Dockerfile which is included during the time of building image and is accessible at the runtime while the container is running
+
+How to declare environment variables in Dockerfile?
+ENV variableName=value
+
+How many ways we can work with environment variables?
+There are 2 ways we can work with environment variable in docker.
+1. build time variables
+2. runtime variables
+
+#1. build-time variables
+These are variables defined as part of the Dockerfile and are included during the build and are available at runtime as well. We define these variables for holding static information about the environment or application we are running inside the container
+
+#2. runtime variables
+These are variables passed as an input while running/launching the container. These are the dynamic values passed as an input to the containerized application which are going to differ from env to env
+
+Why do we need to pass environment variables at runtime?
+If we have defined them statically within the image during build time, whenever these values has to be changed based on env, we need modify the Dockerfile and rebuild the image, since these value are dynamic and change over the time, it is recommended to pass them as runtime values while launching the container to avoid rebuilding the image.
+	
+How to pass the environment variables as an input at runtime?
+There are 2 ways we can pass environment variables as input
+#1. using -e switch
+docker container run -e var=val -e var=val image:tag
+
+#2 using variables file
+create an variables file in which define environment variables you want to pass at the time of launching the container
+variables.env
+var=val
+var=val
+
+docker container run --env-file=variables.env image:tag
+------------------------------------------------------------------------------------------
+#3. ARG directive
+ARG directive is used for passing arguments at the time of building the image. The ARG that we defined are available only during image build time and are not accessible at the runtime within the container
+
+For eg.. let us take a Dockerfile to demonstrate
+Dockerfile
+-----------
+FROM ubuntu:20.04
+RUN apt install -y openjdk-11-jdk
+
+docker image build -t java:1.0 .
+	
+In the above Dockerfile we are installing openjdk-11-jdk with which we are building the image. later on if we want to upgrade to jdk 12 again we need to modify the Dockerfile and rebuild the image
+
+is there a way we can parameterize the inputs to the Dockerfile while building the image, so that we can avoid changing the Dockerfile and rebuild the image by passing different values?
+
+	
+Team#1 = is looking for a dockerimage backed with jdk 11
+Dockerfile
+-----------
+From ubuntu:20.04
+RUN apt install -y openjdk-11-jdk
+
+Team#2 = is looking for a dockerimage with jdk12
+Dockerfile
+-----------
+From ubuntu:20.04
+RUN apt install -y openjdk-12-jdk
+
+we avoid creating multiple dockerfiles in the above context if we can parameterize the builds
+
+ARG directive is used for parameterizing the docker builds
+
+How to define the ARG in the Dockerfile?
+we can define	ARG in the Dockerfile as 
+ARG Name=Value
+
+at the time of declaring the ARG is Dockerfile we can assign default value, so that we can build the docker image without passing the value
+
+Dockerfile
+-----------
+FROM ubuntu:20.04
+ARG JDK_PKG_NM=openjdk-11-jdk
+RUN apt install -y $JDK_PKG_NM
+
+we can use the ARG defined the file in 2 notations
+1. $ARG_NM
+2. ${ARG_NM}
+
+if we define an ARG in Dockerfile without assigning default value then at the time of building the image we need to pass the values for the argument mandatorily as below.
+	
+Dockerfile
+----------
+FROM ubuntu:20.04
+ARG JDK_PKG_NM
+RUN apt install -y $JDK_PKG_NM
+
+docker image build -t java:1.0 . = gives error that JDK_PKG_NM is required
+How to pass the value for the ARG during the build time
+
+docker image build -t java:1.0 --build-arg JDK_PKG_NM=openjdk-11-jdk .
+	
+ARG before FROM directive
+---------------------------
+The only directive that is allowed before the FROM directive as part of Dockerfile is ARG, so that we can parameterize the base image name within the Dockerfile
+
+
+Dockerfile
+-----------
+ARG BASE_IMG_NM
+ARG TAG_NM
+FROM $BASE_IMG_NM:$TAG_NM
+
+The ARG we defined before the FROM directive will not be accessible after the FROM, and has to be purposefully used for parameterizing the FROM only
+
+docker image build -t image:tag --build-arg BASE_IMG_NM=ubuntu --build-arg TAG_NM=20.04 .
+------------------------------------------------------------------------------------------
+How to pass the values dynamically at the time of building the image and using them at runtime?
+	
+ENV
+env is used for defining environment variables
+	# env variables cannot be passed as an input during image building process, those has to be defined in Dockerfile itself with values (only static variables)	
+	# env variables can be passed at runtime while launching the container
+	
+ARG
+using arg directive we can pass dynamic input for image building process
+
+we want to pass input dynamically at the time of building the image and should be accessible while running the container?
+	
+We can take the dynamic input at build time using ARG and set it as an ENV inside the dockerfile
+
+Dockerfile
+-----------
+FROM ubuntu:20.04
+ARG APP_NM #dynamic input for building the image
+ENV APPLICATION_NM=${APP_NM}
+------------------------------------------------------------------------------------------
+#4. LABEL directive
+LABEL is an directive used for defining key=value pair in Dockerfile which is used for documentation of the image
+
+Dockerfile
+----------
+FROM ubuntu:20.04
+LABEL AUTHOR=greg
+LABEL IMAGE_VERSION=1.0
+LABEL LICENSE=apache license 2.0
+	
+docker image build -t label:1.0 .
+docker image inspect label:1.0
+-----------------------------------------------------------------------------------------	
+#5. MAINTAINER
+MAINTAINER is an another directive used for defining the author of the image, and is deprecated and no more in used in favour of LABEL
+
+Dockerfile
+-----------
+FROM ubuntu:20.04
+MAINTAINER greg
+#1 ENV
+#2 ARG
+#3 LABEL
+#4 MAINTAINER
+#5 difference between ENV and ARG
+#6 how to pass the environment variables at the build time as an input
+------------------------------------------------------------------------------------------
+#6. RUN directive
+
+RUN directive is used for running any command during the time of building the image, the output generated by the RUN directive will be written as a layer ontop of the image always.
+	
+RUN is an image building instructions which is executed during the time of building image, and is used for installing the s/w packages as part of the image itself.
+	
+syntax:-
+RUN command
+
+Dockerfile
+-----------
+FROM ubuntu:20.04
+RUN apt update -y
+RUN apt install -y net-tools
+------------------------------------------------------------------------------------------
+#7. COPY directive
+COPY directive is used for copying the files from docker build context to the docker image.
+	
+tokengenerator (airtel)
+|-src
+	|-main
+		|-java
+			|-com.tg.api.TokenGenerator.java
+		|-resources
+|-pom.xml
+|-target
+	|-classes
+		|-*.class
+	|-tokengenerator-1.0.jar		
+|-Dockerfile	
+
+Dockerfile
+-----------
+FROM ubuntu:20.04
+RUN apt update -y
+RUN apt install openjdk-11-jdk
+RUN mkdir /u01
+COPY target/tokengenerator-1.0.jar ~/tg.jar
+7. COPY directive
+------------------
+copy directive is used for copying the files from docker build context into the docker image location
+
+[GitHub]
+----------------------------------------------------
+tokengenerator
+|-src
+	|-main
+		|-java
+			|-com.tg.service.TokenGeneratorService.java
+		|-resources
+|-Dockerfile		
+|-pom.xml
+-----------------------------------------------------
+|-target
+	|-classes
+	|-tokengenerator-1.0.jar (java packaged application)
+	
+/u01/applications
+		|-tokengenerator-1.0.jar
+		
+java -cp /u01/applications/tokengenerator-1.0.jar com.tg.service.TokenGeneratorService
+-----------------------------------------------------------------------------------------
+
+ubuntu (docker workstation) machine
+-------------------------------------
+#1. install java 11
+sudo apt install -y openjdk-11-jdk
+
+#2. install git
+sudo apt install -y git
+
+#3. install maven
+sudo apt install -y maven
+
+
+#4. mkdir ~/javaworkspace
+#5. cd ~/javaworkspace
+#6. git clone -b master https://github.com/techsriman/tokengenerator.git
+username: techsriman
+password: 
+
+#7. goto project directory
+cd ~/javaworkspace/tokengenerator
+#8. build the maven project
+mvn clean verify
+--------------------------- generates the jar file --------------------------------------
+	
+Dockerfile
+-----------
+FROM ubuntu:20.04
+RUN apt update -y
+RUN apt install -y openjdk-11-jdk
+docker
+-------
+         jar                 jdk                cmd
+---------------------  -----------------     -----------
+packaging application, software packages and instructions in running the application along 
+      baseimage
+     ---------
+with libs/bins inside an image, so that it can be executed within a container by isolating it from other applications on that environment
+
+develop -> package -> deliver
+
+delivery abstraction, where the enduser dont need to know how to run the application, what dependent software packages/libraries are required or how to run the application also, just by understanding dockerworkflow and docker cli he can launch/run any application out of a container
+-----------------------------------------------------------------------------------------
+#8. ADD directive
+ADD is similar to COPY directive only, but the only difference between the ADD and COPY is
+	COPY: only copies the files from docker build context to the image
+but ADD can
+	1. copy files from docker build context to the image and
+	2. it download the files from remote system based on URL and can add into the docker image as well
+
+Dockerfile
+------------
+FROM ubuntu:20.04
+ENV JAVA_HOME=/u01/middlware/jdk-11
+ENV PATH=$PATH:$JAVA_HOME/bin
+	
+RUN mkdir -p /u01/middleware/	
+RUN mkdir -p /u01/applications/
+	
+ADD https://download.java.net/openjdk/jdk11/ri/openjdk-11+28_linux-x64_bin.tar.gz	/u01/middleware/
+
+RUN tar -xvf /u01/middleware/openjdk-11+28_linux-x64_bin.tar.gz -C /u01/middleware/
+RUN rm /u01/middleware/openjdk-11+28_linux-x64_bin.tar.gz
+
+COPY target/tokengenerator-1.0.jar /u01/applications/
+CMD java -cp /u01/applications/tokengenerator-1.0.jar com.tg.service.TokenGeneratorService
+------------------------------------------------------------------------------------------
+
+#9. WORKDIR directive
+-----------------------
+The COPY, ADD, CMD, ENTRYPOINT, RUN directives works based relative from WORKDIR location
+
+if we dont specify a WORKDIR location in the Dockerfile, the docker engine by default creates the WORKDIR location "/" (depends on image) and executes the commands
+
+it is always recommended to set WORKDIR location using which we need to apply the COPY, RUN, ENTRYPOINT, CMD, ADD directives rather than specifying the full directory path, so that our Dockerfile becomes easily maintainable
+
+WORKDIR /u01/middleware
+ADD https://download.java.net/openjdk/jdk11/ri/openjdk-11+28_linux-x64_bin.tar.gz	.
+RUN tar -xvf openjdk-11+28_linux-x64_bin.tar.gz	
+RUN rm openjdk-11+28_linux-x64_bin.tar.gz
+
+in the above Dockerfile ADD, RUN directives runs relative from /u01/middlware
+
+VOLUME directive
+----------------
+A containerized application during its execute might generate the data, by default it is written on container writable layer of that container. There are few drawbacks of writing the data to the container writable layer
+	1. writing the data to container writable layer results in poor i/o operation and results in performance issue
+	2. up on container crash or destroyed the data generated by the application into container writable layer is lost
+	
+From the above we can understand all the data written/produced by the applications are small/temporary data which will lost upon destroying the container by which we can understand docker has designed the containers to be stateless
+
+There are 2 reasons to design docker containers as stateless:
+	1. the containerized applications can be quickly scalable
+	2. containers are quickly recoverable
+	
+Not all the applications are stateless, there are applications that generates the data out of their execution, for eg, we can package a database server inside the image and run inside a container, it generates the data (.data files) and stores on container writable layer.
+if the database server container has been crashed,the entire data stored inside database is lost, to help in managing or storing the data of a statefull applications docker has introduced 2 ways of storing the data externalized to the container
+	1. bind mounts
+	2. docker volumes
+	
+If your containerized application is producing the data that has to persisted then such containers are called "stateful" containers and to manage their state we need to use bind mounts or docker volumes
+-----------------------------------------------------------------------------------------
+#1. bind mounts
+----------------
+Bind Mounts are the directories of the host machine are mounted to the directory locations of the container. So that all the data produced by the containerized application into that directory location will be stored on host filesystem directory
+
+So incase of container crash we can quickly spin one more contaier by mounting the same bind mount onto the new container, so that data will not be lost
+
+advantages:-
+	1. Both the containerized application and host can see/use the data since it is stored on the host machine and mounted on the container
+	
+dis-advantages:-
+	1. bind mounts works based on host filesystem, if the host platform is not compatible with the container platform, then there is a chance of running into data incompatibility issues in storing the data
+	2. bind mounts are slow in read/writing the data when compared with docker volumes
+	3. the docker engineer/devops engineer is responsible for manually managing the bind mounts like
+		1. create
+		2. backup
+		3. recovery/migrating
+
+bind mounts
+-----------
+bind mounts are used for mouting the host computer directory on to the docker container. while running statefull applications within a container, to ensure the data is not lost incase of container crash or destroyed we use bind mounts.
+
+advantages:-
+	1. both container and the host machine can access the data that is stored in bind mounts
+dis-advantages:-
+	1. both host and container are running on a different platform then incompatibility issues might creep up
+	2. bind mounts are slow in terms of i/o operations when compared with volumes
+	3. should be manged manually
+	
+How to work with bind mounts?
+#1. create an directory on the host machine
+#2. grant appropriate permissions to the directory allowing container to access
+#3. there are 2 ways of mounting an bind mount onto a container
+	3.1 -v or --volume (oldstyle)
+		-v sourcedir:targetdir:propagationSetting
+		propagationSetting can take 3 different values
+		ro = readonly
+		z = sharable mount
+		Z = private mount
+	docker container run -v sourcedir:targetdir:propagationSetting image:tag
+	
+	3.2 --mount (newstyle) (abbrevative)
+		--mount type=bind,source=sourcedir,target=targetdir,propagationSetting
+		propagationSetting can take below values
+		1. readonly
+		2. sharable
+		3. private
+------------------------------------------------------------------------------------------
+docker volume
+-------------
+docker volumes are the internal storage volumes managed by the docker engine into which a docker container can write the data to persist it, in the event of container crash. It is the preffered mechanism/technic to store the data generated by the docker container
+
+The docker engine internally uses storage drivers in writing the data onto the docker volumes
+
+advantages:-
+	1. docker volumes works across the platforms, so there is no data incompatibility issues will creep up
+	2. docker volumes can be created through docker cli
+	3. docker volumes can be managed, backup and restored through the help of docker cli
+	4. remote filesystem of an another computer can be mounted as a docker volume (nfs)
+	5. docker volumes are more performant in terms of i/o when compared with bind mounts
+	
+There are 2 ways we can work with docker volumes
+1. we can manually create docker volume on the host computer using dockercli and can mount them onto the container using their name, these are called "named volumes"
+2. we can directly declare VOLUME directive inside the Dockerfile, in this case, the docker engine creates the docker volume automatically by generating an hash of the volume to identify it and mounts onto the docker container
+
+[preffered approach]
+#1. How to create docker volume through the docker cli
+1.1 docker volume create volumename = creates an docker volume under default directoy /var/lib/docker/volumes/volumename (directory)
+1.2 docker volume ls = to list all the volumes on that docker host
+1.3 docker volume inspect volumename = to see the details of the volume
+1.4 docker volume rm volumename = deletes the volume
+
+How to mount the above volume onto the docker engine?
+There are 2 ways we can mount the volume at the time of launching the container
+1. -v or --volume
+	-v volumeName:targetDirectory:propagrationSetting
+	propagationSettings: ro(readonly), z(shared) ,Z(private)
+	docker container run -v volumeName:targetDirectory:[propagationSetting]	image:tag
+	
+2. --mount 
+	--mount type=volume source=volumeName,target=directory,propagationSetting
+	
+#2 we can use VOLUME directive in dockerfile directly
+Dockerfile
+-----------
+FROM ubuntu:20.04
+VOLUME["/u01"]	
+
+1. The above VOLUME directive creates an volume on the host machine automatically without name by generating an hashvalue to the volume to identity
+2. and mounts the volume onto the /u01 location of the container
+
+For eg.. the container has been crashed/destroyed, now how can remount the same volume onto a different container. since the above volume doesnt have an name attached to it we cannnot mount this volume onto an another container
+
+always avoid using VOLUME directive as part of the Dockerfile
+------------------------------------------------------------------------------------------
+How to copy a file into the volume of a running container?
+docker cp sourcefile containername:location
+
+1.for eg we launched a container using an volume below.
+docker container run --name con1 -it --mount type=volume,source=mysqlvol,target=/u01 ubuntu:20.04 bash
+
+2. now we can copy a file into the volume of the running container using below command
+docker cp filename.txt con1:/u01
+------------------------------------------------------------------------------------------
+#10 EXPOSE directive
+EXPOSE directive doesnt exposes any port of the docker container to the guest, its just for the sake of documentation stating the containerized application is running on which port so that the user who is launching the container can expose that port
+
+CMD directive
+only CMD without ENTRYPOINT
+----------------------------
+CMD directive is used for making an docker container executable, it the default instruction with which the docker container beings its execution.
+	
+CMD can be written in 3 forms
+#1. CMD ["command", "param1", "param2"] = execute form (no shell)
+#2. CMD ["param1", "param2"] = used along with ENTRYPOINT
+#3. CMD command param1 param2 = shell-form
+
+Notable points:-
+	1. CMD is used for making an container executable and is the default instruction with which the docker containers runs (in the absence of ENTRYPOINT)
+	2. We can write multiple CMD directives within a Dockerfile but only the last directive/instruction will be executed by ignoring others
+	3. We can override the default command we wrote in CMD while launching the container
+	4. Within a CMD only we can write one command, but incase if we want to execute multiple commands as part of the CMD we have 2 options
+		4.1 write all the commands in a shellscript file and run the shellscript as part of the CMD directive
+		CMD ["./run.sh"]
+		4.2 while using shell-form we can concatenate multiple commands using && or ;
+		CMD command1 && command2 (or)
+		CMD command1;command2
+------------------------------------------------------------------------------------------
+ENTRYPOINT
+ENTRYPOINT directive is also used for making an docker container executable. when we run the docker container, the container executes from ENTRYPOINT directive instruction only.
+	
+The major difference between ENTRYPOINT and CMD is incase of CMD it can be overriden while launching the container, but whereas an ENTRYPOINT instruction cannot be overridden while launching the container
+
+CMD and ENTRYPOINT together
+---------------------------
+In a Dockerfile we can write both CMD and ENTRYPOINT together, there are 2 options of writing them in Dockerfile
+
+1. CMD before ENTRYPOINT
+-------------------------
+in case if we have written CMD before ENTRYPOINT the docker engine ignores the CMD and only execute ENTRYPOINT only
+
+Dockerfile
+-----------
+FROM ubuntu:20.04
+CMD ["echo", "CMD instruction here!"]
+ENTRYPOINT ["echo", "ENTRYPOINT instruction here!"]
+
+	
+docker image build -t cmdep:1.0 .
+docker container run cmdep:1.0
+	
+2. CMD after ENTRYPOINT
+-------------------------
+if we write CMD after ENTRYPOINT instruction in the Dockerfile, if we are using execute form only then CMD acts as parameters to the ENTRYPOINT instruction
+
+Dockerfile
+-----------
+FORM ubuntu:20.04
+ENTRYPOINT [ls]
+CMD[-l]
+
+------------------------------------------------------------------------------------------
+How to execute an docker container interactively while using ENTRYPOINT in the Dockerfile?
+java program that prints the n number of even numbers as an output.
+	
+evengenerator
+|-src
+	|-main
+		|-java
+			|-com.evengenerator.bean
+				|-NumberGenerator.java
+		|-resources
+	|-Dockerfile	
+	|-sh
+		|-launch.sh
+|-pom.xml
+
+package com.evengenerator.bean;
+public class NumberGenerator {
+	public static void main(String[] args) {
+		int n = 0;
+		int i =0;
+		int index = 2;
+		n = Integer.parseInt(System.getProperty("N"));
+		
+		while(i<=n) {
+			if(index % 2 == 0){
+				sop(index);
+				i++;
+			}
+			index++;
+		}
+		sop("bye!")
+	}
+}
+
+Dockerfile
+-----------
+FROM ubuntu:20.04
+ENV JAVA_HOME=/u01/middleware/jdk-11
+ENV PATH=$PATH:$JAVA_HOME/bin
+
+RUN mkdir -p /u01/middleware
+RUN mkdir -p /u01/applications
+
+WORKDIR /u01/middleware
+ADD http://jdk/download/binary .
+RUN jar -xzvf openjdk-11-jdk.tar.gz
+RUN rm -rf openjdk-11-jdk.tar.gz
+
+WORKDIR /u01/applications
+COPY target/evengenerator.jar .
+ENTRYPOINT ["java", "-cp", "./evengenerator.jar", "com.evengenerator.bean.NumberGenerator"]
+
+docker image build -t eg:1.0 .
+docker container run -it -e N=10 eg:1.0 bash
+in the above line we are overriding the ENTRYPOINT instruction while launching the container which will be ignored and only the java program will be executed
+
+
+launch.sh
+----------
+#!/bin/bash
+set -e
+nohup java -cp evengenerator.jar com.evengenerator.bean.NumberGenerator &
+exec $@
+	
+	
+Dockerfile
+-----------
+FROM ubuntu:20.04
+ENV JAVA_HOME=/u01/middleware/jdk-11
+ENV PATH=$PATH:$JAVA_HOME/bin
+
+RUN mkdir -p /u01/middleware
+RUN mkdir -p /u01/applications
+
+WORKDIR /u01/middleware
+ADD http://jdk/download/binary .
+RUN jar -xzvf openjdk-11-jdk.tar.gz
+RUN rm -rf openjdk-11-jdk.tar.gz
+
+WORKDIR /u01/applications
+COPY target/evengenerator.jar .
+COPY sh/launch.sh .
+RUN chmod u+x sh/launch.sh
+
+ENTRYPOINT ["sh/launch.sh"]	
+
+docker container run -it -e N=10 eg:1.0 bash
+
+How to override an ENTRYPOINT instruction written in a Dockerfile while running a container?
+run.sh
+------
+#!/bin/bash
+set -e
+nohup actual command for launching the container &
+exec $@
+	
+Dockerfile
+ENTRYPOINT ["./run.sh"]
+------------------------------------------------------------------------------------------
+How to run a docker container as an infinite container?
+	
+Docker Container means?
+Docker container is nothing but a program running in an isolated environment. The container terminates by the moment when the program terminates. 
+Indirectly: if there is no program hanging up the container, automatically the container terminates
+
+foodies (java web application)
+|-src
+	|-main
+		|-java
+		|-resources
+		|-webapp
+			|-WEB-INF
+				|-web.xml
+				|-jsp
+					|-*.jsp
+|-pom.xml
+|-Dockerfile
+|-target
+	|-foodies.war
+	
+Dockerfile
+-----------
+FROM ubuntu:20.04
+ENV JAVA_HOME=/u01/middleware/jdk-11
+ENV TOMCAT_HOME=/u01/middleware/apache-tomcat-9.0.11
+ENV PATH=$PATH:$JAVA_HOME/bin:$TOMCAT_HOME/bin
+
+RUN mkdir -p /u01/middleware
+WORKDIR /u01/middlware
+
+ADD jdkUrl .
+ADD tomcatUrl .
+	
+RUN tar -xzvf openjdk-11-jdk.tar.gz
+RUN tar -xzvf apache-tomcat-9.0.11-bin.tar.gz
+
+COPY target/foodies.war apache-tomcat-9.0.11/webapps
+ENTRYPOINT [apache-tomcat-9.0.11/bin/startup.sh]
+
+When we package and run server platforms inside the container we want container to run for a long time util we stop. but the server program we launch may return the control back quickly upon executing an startup script, which will cause the container to terminate. but how can we hold on the container keeping the server running inside it?
+	
+ENTRYPOINT[startup.sh]
+CMD [tail -f /dev/null]p
+
+How to keep the docker container running?
+apache-tomcat-9.0.50/bin
+|-startup.sh
+
+ENTRYPOINT ["apache-tomcat-9.0.50/bin/startup.sh"]
+CMD [tail -f /dev/null] #dummy instruction to keep the container running
+------------------------------------------------------------------------------------------
+What are the possible states in which a docker container can exists?
+A docker container can exists in 7 different states
+1. created = The container has been created out of an image, but it has not yet started
+2. running = container is up and running and is ready for accessing/usage 
+3. paused = kept temporarily under pause
+4. exited = the container finshed execution successfully and stopped
+5. restarting = container has been stopped and started 
+6. removed = container has been removed
+7. dead = forceful termination of the container indicates dead
+
+HEALTHCHECK directive
+----------------------
+When we run an docker container, the application packaged inside the container will be running and the status of the container is reported as running.
+By looking at the status of the container as "running" we cannot say what is the underlying status of the application packaged inside the container, may be the application that is packaged inside the container may have not started and might has resulted in failure state or due to heavy loads or various reasons the application might go into unresponsive state.
+	
+So just by looking at the docker container status we can not predict or say the state/health of the application
+How to monitor the status/health of the application that is running inside the container?
+To help us in understand the status/health of underlying application packaged and running inside the container the HEALTHCHECK directive has been provided.
+	
+In order to verify whether the application is running or not, we need to frequently access the application and verify the output (success/failure), but hitting the application generates an artificial traffic and slows down the performance of the application
+Instead of it the developers of the application has to expose HealthEndpoint of that application which will takes the request from the user and performs some preliminary checks to determine health of the application and returns success/failure based on which we can know application status
+
+Since we kept the HealthEndpoint to only perform preliminary checks in returning the status there is zero impact on the performance
+
+Now we can monitor easily the containerized application by hitting the healthendpoint exposed by the developers of the application. but keeping track and manually monitoring the containerized application is highly difficult.
+	
+Instead Docker has provided HEALTHCHECK directive upon declaring it with endpoint information and polling duration, the docker daemon repeated polls the healthendpoint and reports the relevant status of the container rather than showing it as running.
+	
+if a docker container has been written with HEALTHCHECK endpoint in Dockerfile, then along with container status as UP it shows whether application running inside it is (healthy/unhealthy)	
+	
+1. HEALTHCHECK [options] CMD [commandToVerifyTheEndpoint]	
+
+options:-
+	1. --interval=DURATION = how frequent intervals at which it has to execute the CMD we supplied to determine the status of the application
+	2. --timeout=ms = how long should we wait for getting a response from the HEALTHCHECK CMD
+	3. --start-period=ms =millisecond to be waited before starting the HEALTHCHECK to allow application to start
+	4. -- retries=N how many retries it has to do before reporting the application failure status
+	
+What are the different statuses under which a docker container can exists?
+A docker container can exists in any one of the 7 states
+1. created
+2. running
+3. paused
+4. restarted
+5. exited
+6. removed
+7. dead
+------------------------------------------------------------------------------------------
+HEALTHCHECK directive
+by looking at the container under "running" status we cannot guarantee the health of the application that is running inside the container.
+	
+There can be a possibility where
+1. application running inside the container may have not started properly or
+2. application could have ran into a stuck thread or non-responsive state where it became in-accessible
+
+even then also the docker engine reports the status of the container as "running" only which leads to unnecessary consumption of system resources and not able to detect the failure of the application
+
+How to identify the application is healthy or not, so that we can stop/restart the container if the application has ran into a problem within the container?
+To help us in keeping track of the health of the application that is running inside the container the docker has introduced HEALTHCHECK directive
+
+To work with HEALTHCHECK directive there are 2 aspects of it
+1. The developer of the software application has to expose an Health Endpoint that can be polled periodically by the docker engine to understand the health of application
+
+2. The devops engineer while baking the docker image has to include HEALTHCHECK directive in invoking the Health Endpoint provided by the developer in returning the status code to docker engine
+
+The docker engine repeatedly polls or executes the HEALTHECHECK directive configured command and takes the result (0|1) based on which it reports the status of the application
+
+HEALTHCHECK [options] CMD command
+options:-
+	1. --interval=DURATION in ms [how frequently the CMD supplied needs to be executed]
+	2. --timeout=DURATION ms = The interval of time to be waited for response from the CMD otherwise mark it as failed
+	3. --start-period=DURATION ms = how long it has to wait upon launching the container to execute the HEALTHCHECK cmd
+	4. --retries=N = how many times it has to execute the HEALTHCHCK cmd before marking the application as unhealthy
+	
+
+
+directives
+1. parser directives [ESCAPE, SYNTAX]
+2. FROM
+3. ENV
+4. ARG
+5. LABEL
+6. MAINTAINER
+7. COPY
+8. ADD
+9. WORKDIR
+10. VOLUME
+11. EXPOSE
+12. CMD
+13. ENTRYPOINT
+14. RUN
+15. HEALTHCHECK
+---------------------------
+#1. How to override entrypoint instruction?
+#2. How to execute multiple commands upon the lauch of a container?
+#3. How to make an docker container as an infinite container?
+------------------------------------------------------------------------------------------
+docker networking
+-----------------
+The most important aspect of docker is the support networking. it allows a docker container to talk to the host or host to the docker container. in addition an docker container can talk to other docker containers running on the docker engine.
+	
+by providing various different network options docker engine provides us an ability of building applications and containerize them and run in a network of clustered applications
+
+The docker networking works based on network drivers, we can build our own network drivers and plugin onto the docker engine customizing the network options we want to enable
+
+The docker by default supports 5 modes of networking
+1. bridge networking
+2. host
+3. overlay
+4. mcvlan
+5. none
+
+#1. bridge networking
+when we run a docker container without specifying any network option, the default mode of networking with which the docker container will be launched is "bridge".
+
+if we want to isolate our docker container from other containers running on the docker engine, we can create an bridge network, so that the group of containers connected to the same bridge network can communicate with each other by isolating themself from other containers running on the docker engine/host
+
+by default on the docker engine there is a default bridge will be created on the docker engine, so that all the containers that we launch on the docker engine are connected to default bridge, so that each container can talk to other container that is connected to the default bridge thus making them insecure, so avoid using default bridge
+
+There are plenty of advantages of creating our own bridge network in launching the containers rather than using default bridge:
+1. when we run the containers on the default bridge network, one container can access the other container that is connected to the default bridge network only through ip address of the container (dns resolution will not happens on default bridge network)
+we need to run docker container inspect containerName, extract the ip address of the container to access it from another container.
+	
+whereas if we use our own bridge network in running the containers, the dns resolution is supported, so that we dont need to the ip address of the other container to access it rather we can use containerName (as hostname) to access the container of the same bridge.
+	
+2. With default bridge network we cannot attach or detach containers to the bridge
+whereas if we create our own bridge network, we can onfly at runtime can attach containers or detach containers from the bridge network
+
+3. if we use our own user-defined bridge network we can customize the network configurations and ip tables with which we want to host the containers onto the bridge which is not supported by the default brige
+
+How to create our own network bridge?
+1. docker network create bridgeName
+2. docker network rm bridgeName
+3. docker network connect bridgeName containerName
+4. docker network disconnect bridgeName containerName
+
+5. docker network ls = shows all the network adapters available on the docker engine
+
+while launching the docker container we can specify the network option and bridge to be connect as below.
+docker network create bridge1
+docker container run --name java --bridge bridge1 -p 8080:8080 image:tag
+docker container run --name mysql --bridge bridge1 -p 3306:3306 mysql:1.0
+-----------------------------------------------------------------------------------------	
+#2. host
+if we want to run the docker container directly on the host network by removing isolation form the host we can use host network.
+	
+	
+	
+docker networking
+------------------
+docker supports 5 types of network modes
+1. bridge network
+2. host network
+3. overlay
+4. macvlan
+5. none
+
+1. bridge network
+if we want to create an isolated network on which we want to make group of containers to communicate with each other then we need to use bridge network
+
+by default when we run the docker container without specifying network option, the it will launched under default bridge, which means all the containers on the default bridge will communicate thus making it in-secure
+
+if we are creating an user-defined bridge network in launching the containers we have advantages:-
+	1. dns resolution
+	2. we can customize the configurations and ip tables of the network
+	3. we can attach and detach containers onfly at runtime
+	
+#2. host network
+There is only one host network per docker engine will be created. when we launch an docker container under host network, the container will be running on the network of the host directly. The host-container can communicate with each other
+when we use host network there is no need of port-forwarding, since both are on the same network
+
+#3. overlay
+using the overlay we can make a container of one docker workstation to communicate with another docker container running on a different docker engine/workstation
+
+#4 macvlan
+allows you to attach mac address to an docker container, appearing it as a physical network adapter. The docker engine will routes the network traffic to a specific container based on mac address
+
+#5. none
+no networking
+
+
+What are the networking modes available in docker?
+There are 5 network modes available in docker
+1. bridge
+2. host
+3. overlay
+4. mcvlan
+5. none
+------------------------------------------------------------------------------------------
+How to host our own docker container registry?
+Docker hub is an public docker container registry available through which we can publish/distribute docker images.
+few of the organizations may not use docker hub as a container registry due to certain restrictions or limitations:
+1. docker hub is an public registry where we dont want to publish a commercial project into an public repository
+2. many organization network policies restricts the workstations to connect to internet due to which we cannot use docker hub as a registry
+3. since docker hub is hosted on public internet, publishing/distributing images consumes huge network bandwidth and slows down the application deployments
+
+due to the above reasons organizations may setup their own private container registries.
+	
+There are organizations who are building container registry software and distributes to the people, so organizations can use these software in hosting their own registries. few are opensource registries and few are commercial
+1. jfrog jcr (opensource with few features only enabled)
+2. nexus container registry (commercial)
+
+#1. jfrog jcr registry
+1. jfrog jcr requires domain name resolution to work
+so to host jcr on a domain name we need to setup virtualhost configuration use apache2 server
+	1.1 install apache2
+		sudo apt update -y
+		sudo apt install -y apache2
+	1.2 enable apache2 modules
+		sudo a2enmod proxy
+		sudo a2enmod proxy_http
+		sudo a2enmod proxy_loadbalancer
+		sudo a2enmod lbmethod_byrequests
+	1.3 virtual host configuration file
+	/etc/apache2/sites-available/jcrhub.conf
+	<VirtualHost *:80>
+		ServerName jcrhub.com
+		ProxyPreserveHost on
+		ProxyPass / http://127.0.0.1:8082/
+		ProxyPassReverse / http://127.0.0.1:8082/		
+	</VirtualHost>
+	1.4 enable the virtualhost configuration
+	sudo a2ensite jcrhub
+	sudo systemctl daemon-reload
+	sudo systemctl restart apache2
+	
+#2 jfrog jcr registry setup
+#1. download from: https://jfrog.com/container-registry/ (jfrog-artifactory-jcr-7.37.14-linux.tar.gz)
+#2. create an directory 
+mkdir -p /u01/middleware
+#3. copy the tar.gz file into /u01/middleware and extract it
+mv ~/Downloads/jfrog-artifactory-jcr-7.37.14-linux.tar.gz /u01/middleware
+cd /u01/middlware
+tar -xzvf jfrog-artifactory-jcr-7.37.14-linux.tar.gz
+
+#4. with default configurations we can launch the jfrog artifactory jcr registry
+goto artifactory-jcr-7.37.14/app/bin
+cd /u01/middlware/artifactory-jcr-7.37.14/app/bin
+./artifactory.sh
+
+The artifactory jcr registry will run by default on 8082 port, that is the reason we configured apache2 virtualhost configuration pointing to http://localhost:8082/
+------------------------------------------------------------------------------------------
+#3 dns hostname configuration on localhost
+sudo vim /etc/hosts
+127.0.0.1  jcrhub.com
+------------------------------------------------------------------------------------------
+How to pull/publish images from our local docker repository?
+	
+pulling images
+-----------------
+docker image pull repositoryServerAddress/repositoryName/image:tag
+docker image pull jcrhub.com/docker/ubuntu:20.04
+
+How to publish the image?
+we need to build an image with tag/name matching with serverAddress/repositoryName/image:tag and then we can publish
+
+docker image build -t jcrhub.com/docker/sailor:1.0 .
+above command build an docker image with tag name as above specified format
+
+docker image publish jcrhub.com/docker/sailor:1.0
+now the above image will be published into jcrhub.com docker container registry server into docker local repository with name as sailor:1.0
+	
+To perform pulling and pushing images into our own organization repository we need authenticate by login to the server
+docker login jcrhub.com
+username: admin
+password: Welcome@1
+
+How to deploy a multi-tier application?
+
+How to run the urotaxi application?
+urotaxi
+|-src
+	|-main
+		|-java			
+		|-resources
+			|-application.yml
+		|-db
+			|-urotaxidb.sql (database tables script)
+|-pom.xml
+|-README.md
+
+#1. build the java project by going to the project directory as below
+mvn clean verify
+
+#2. before running the application we need to run the mysql database server
+#3. setup the database schema with tables by running urotaxi/src/main/db/urotaxidb.sql file on the database server (one-time only)
+
+#4. install jdk 11
+#5. set the below properties as env variables with appropriate values
+
+to run the above application we need to pass the properties as an input populated with values pointing to database server
+
+spring.datasource.url=
+spring.datasource.username=
+spring.datasource.password=
+				
+#6. run the java application using 
+java -jar urotaxi-1.0.jar
+------------------------------------------------------------------------------------------
+#1. create an bridge network
+docker network create urotaxinetwork
+
+#2. create an docker volume to mount it onto the database container
+docker volume create mysqlvol
+
+
+#3. mysql server database docker image
+docker run --name mysqldb -e MYSQL_ROOT_PASSWORD=welcome1 --network urotaxinetwork -d --mount type=volume;source=mysqlvol;target=/var/lib/mysql  mysql:latest
+	
+#4. goto mysqlserver container and run urotaxidb.sql for creating tables
+[short-cut] docker container exec mysql mysql -uroot -pwelcome1 < urotaxidb.sql
+(or)
+docker cp urotaxidb.sql mysql:/home/root
+docker container exec -it mysql bash
+root# mysql -uroot -pwelcome1 < urotaxidb.sql
+------------------------------------------------------------------------------------------
+#5 docker image with java application
+Dockerfile
+----------
+FROM ubuntu:20.04
+RUN apt update -y
+RUN apt install -y openjdk-11-jdk
+RUN apt install -y curl
+RUN mkdir -p /u01/applications
+WORKDIR /u01/applications
+COPY target/urotaxi-1.0.jar .
+HEALTHCHECK --interval=30s --start-period=3s --timeout=30s --retries=3 CMD curl -f http://localhost:8080/actuator/health || exit 1
+ENTRYPOINT [java -jar urotaxi-1.0.jar]
+
+docker image build -t urotaxi:1.0 .
+
+#6 launch the container
+variables.env
+-------------
+spring.datasource.url=jdbc:mysql://mysqldb:3306/urotaxidb
+spring.datasource.username=root
+spring.datasource.password=welcome1
+
+docker container run --name urotaxi --network urotaxinetwork --env-file=variables.env -p 8080:8080 -d urotax:1.0
+	
+	
+
 
 
 
