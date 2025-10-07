@@ -1,0 +1,271 @@
+What is virtualization, why do we need to use it?
+We can run multiple environment in-parallel, isolated from each other on a one physical machine through virtualization.
+benefits:-
+  1. we can effectively utilize the hardware resources of the physical machine by sharing them between multiple virtual machine environments
+  2. organizations can lower their investment cost of procuring hardware resources in running multiple different environments through the virtualization technology
+  3. The System administration and Support teams can utilize the virtualization technology to quickly swap different environments on the physical machine to provide environments for different teams across.
+  4. development teams can utilize virtualization technology to quickly bring up their development environments
+  
+Virtualization works on top of hypervisor, it is a component that helps in sharing the physical hardware resources of the computer across multiple virtual environments which gives an illusion of having multiple machines.
+There are 2 types of hypervisors are there
+1. Software hypervisor = installed on top of host machine operating system, which communicates with the host os in sharing the physical hardware resources to the guest mahcines.
+drawbacks:
+  The Host Operating System, which consumes the physical resources of the computer unnecessarily just to keep hypervisor running.
+advantage:
+  low cost solution
+  
+2. Hardware hypervisor = directly runs on top the hardware of the physical machine without the need of operating system the host. the full capacity of the host is utilized for the guest machines only, which can result in max throughput.
+drawbacks:
+  high cost, cannot be used for personal computing
+advantages:
+  no wastage of physical resources as there is no host os
+  
+There are lot of vendors producing the software and hardware hypervisors in the market.
+1. Software hypervisor providers
+  1.1 Oracle virtualbox (popular/opensource s/w hypervisor)
+  1.2 vm workstation
+  1.3 vm desktop
+  1.4 hyper-v (microsoft)
+  1.5 parallelx
+  
+2. Hardware hypervisor or native or bare-metal hypervisors
+  1.1 Microsoft Hyper-V
+  1.2 Oracle VM Server
+  1.3 VMWare ESXi (no operating system) 
+  1.4 Xen Server  
+-----------------------------------------------------------------------------------------------------
+Virtualbox Networking
+
+Networking is one of the most important aspect of any computer whether it is host machine or even guest machine, without networking merely the presence of the machine is useless, as it cannot communicate with the external world.
+    
+For eg
+1. how to download/install a software package on to the guest machine when it was not connected to any network.
+2. how can we upgrade an existing software package or operating system patches on to the guest machine
+3. we cannot access the applications running with the guest machine from outside the world.
+    
+looks like if the virtual machine cannot connect to the network, it becomes isolated and cannot be used for any purpose, so not only the physical machines even the virtual machines also should have ability of connecting over the network.
+  
+How to establish networking for virtual machines?
+Through the help of hypervisor we are creating the virtual machines. if any computer to be connected over the network, it requires network interface card.
+  
+If we have a physical computer, we can plugin a hardware network adapter into the computer and we can establish network to that computer. Since the virtual machines are not physical we cannot attach physical network interface cards to them.
+
+So the Hypervisor Softwares has to emulate a hardware network interface card, which is an virtual network interface card and should attach to the virtual machine at the time of creating the virtual machine so that it can be plugged into network.
+
+Having virtual network interface card for a guest/virtual machine is not sufficient, since it is not a physical hardware device, we cannot plugin the network wire into its port to bring it on the network. we need the support of hypervisor software, which can help us in attaching network to the virtual network adapter of the virtual machine.
+  
+The hypervisor acts an network engine/router which will routes the data packets between the host and guest machine. Every hypervisor support different networking modes/models helping us in choosing how it should route the data packets between host and guest.
+
+
+What is virtualization, why do we need to use it?
+We can run mulitple parallel isolated environments on a physical machine using virtualization.
+  
+Virtual Networking
+--------------------
+The Virtual Machine we have created through the help of hypervisor should be connected to the network otherwise we cannot use the machine effectively like
+  1. we cannot download and install any Software on the machine
+  2. we cannot update exiting software applications
+  3. we cannot access the application running within virtual machine by exposing it to external world.
+merely it looks like there is no use of virtualization technology if there is no ability of connecting the virtual machines to the network. So, the support for connecting an virtual machine to the network is provided by every hypervisor vendor.
+  
+To have any computer/machine connected to the network it required network adapter, even if it is an virtual machine required network adapter, the hypervisor while creating the virtual machine should attach an network adapter to the virtual machine facilitating it to connect to the network.
+  
+Every hypervisor will create an virtual or emulated network interface card and attaches to the virtual machine while creating the virtual machine. The hypervisor acts as an routing engine in transferring the data packets between physical adapter and virtual network adapter of the virtual machine.
+  
+By establishing network to the virtual machine we have 5 possibilities of allowing the traffic to the virtual machine as described below.
+  
+1. guest -> host
+2. host -> guest
+3. guest -> external network
+4. external network -> guest
+5. guest -> guest
+
+we dont want always our virtual machine to be opened for everyone for access, it depends on which types of applications we are running based on which we decide the accessibility of the machine
+
+In-Short:-
+  1. every hypervisor vendor should create and attach virtual network interface card to an virtual machine to let it connect to the network
+  2. hypervisor should provide networking modes helping us to choose how does the network traffic should be received/send from a virtual machine
+
+Virtualbox hypervisor networking
+---------------------------------
+When we create a virtual machine with oracle virtualbox hypervisor, by default it creates 8 network interface cards for each guest/virtual machine. we can see only 4 network interface cards through UI and by default 1 enabled. The other 4 network interface cards can be managed through Virtualbox Manager commandline interface tool (vboxmanager)
+
+VBoxManage modifyvm vmname --nic4 networkmode  
+when we install virtualbox hypervisor software the VBoxManage tool is also installed by default through which we can manage the virtualmachine in CLI mode.
+  
+There are six virtual adapters types that can be virtualized using virtualbox
+1. AMD PCnet-PCI II
+2. AMD PCnet-FAST III
+3. Intel PRO/1000 MT Desktop
+4. Intel PRO/1000 T Server
+5. Intel PRO/1000 MT Server
+6. ParaVirtualized Network Adapter
+
+Oracle virtualbox supports 7 networking modes allowing you to establish network for your virtual machine
+1. Not Attached
+2. NAT
+3. NAT Network
+4. Bridge Network
+5. Internal Network
+6. Host-Only Network adapter
+7. Generic Driver
+
+How many network modes are supported by virtualbox hypervisor?
+7 network modes are supported by virtualbox hypervisor.
+1. Not Attached = Network adapter is not plugged in
+2. NAT = The virtual machine is plugged into the NAT Port of the virtualbox there by allowing only outbound traffic from guest-> host or external network, but not the viceversa. No 2 guests can also communicate with eath other
+3. NAT Network = Similar to NAT, but all the guests on the same nat network can communicate with each other.
+4. Bridge Network = The virtual network adapter will be plugged into the gateway of the physical network adapter bringing all of them into 1 network, forming a bridge.  Now the ip address of the virtual and physical nic will be on the same network address thus forming them all into one network.
+The Network interface cards plugged-in to the same bridge can communicate in all the ways like
+guest=guest
+guest=host
+guest=external network
+host=guest
+external network=guest
+Problems:-
+  1. we need to configure the bridge and restart the vm always
+  2. we will quickly run out of ip addresses if more vms are connected
+  3. security
+
+5. Internal Network
+Virtual machines whose network adapters are configured to work with Internal Network are connected to an isolated virtual network similar to vpc network. VMs connected to the Internal network can communicate with each other, but they cannot communicate with host or external network.
+Similarly the host and external network cannot access the VMs. We use Internal network for modelling real-world networks.
+          
+6. Host-Only Network adapter
+We create a virtual host-only network adapter on the host machine. Now all the vms nic are plugged in through the host-only network adapter. So that all vms on the host-only network adapter can communiate and guest-> host and host-> guest also enabled.
+But no external network.
+  
+
+7. Generic Driver
+This network mode allows you to use a generic network interface for your virtual machine.
+  
+  
+----------------------------------------
+How many types of processes are there in Linux?
+There are 2 types of processes are there
+1. Foreground process
+A program/process launched by the user interactively, which takes input data from the user during execution and produces intermediate or final result upon completion to the user directly. In general foreground processes are short-lived programs upon execution will complete within stipulated amount of time and produces the result.
+The terminal/user would be blocked until the completion of the program.  
+  
+2. Background process
+If we have program which doesnt require any user-interaction, these programs are usually long-running jobs which dont take any input from user during execution and doesnt directly provide output to the user directly, then running these programs as a foreground process is of no use apart from block terminal process. Instead we launch such programs as background process.  
+in-short:-background process is a program that runs for long amount of time without user interaction.
+  
+There are certain programs which are non-interactive and are going to perform mandatory services like
+1. mounting network drives
+2. loading the network adapters
+3. periodically taking the backup of the application directories etc
+and if these fail to run, some of the functionalities of our application/System will be lost.
+  
+if we are running mandatory system services as background processes there are certain limitations are there
+1. the background process will not be started automatically, upon booting the machine the user has to manually kickoff the program to run. since it is mandatory service, if we forget to run upon booting the machine there is always a chance of lose of functionality
+
+2. we should monitor the program periodically to ensure it is running, in case crash the functionality will be lost, so we should ensure and restart the program when it got terminated which is difficult job
+
+3. to manage the program like stop/restart we should know the pid of the program which will keep on changing everytime when we launch it.
+  
+How can we manage/monitor such mandatory system services of our system/application?
+To address the above problem there is software package utility called Systemd tool has been introduced, this can be installed on various different linux distro's which helps us in managing the background processes easily.
+In ubuntu distro the systemd tool is pre-installed and is available for usage.
+The systemd is an tool or utility the help us in managing the background process easily. Now we need to provide the information about our programs as a Unit definition to the systemd process. So that systemd takes care of managing your program by running it as part of Ubuntu Service.
+  
+The systemd has provided handful of commands or utilities in managing your services/process like
+stop, start, restart, status, reload, disable, enable etc.
+
+There are 2 types of process are there
+1. Foreground 
+These process required user interaction during the time of execution, the enduser has to provide data as an input while running and the process will provide output directly to the enduser.
+  
+2. Background
+These are the process which are usually in runs for longer amount of time and doesnt require user interaction during execution and will not provide output directly to the enduser. Such process rather than running in foreground by blocking the terminal process, we can run them as background process.
+  
+There are certain programs that performs mandatory operations/services which has to be executed upon the boot of the operating system and should continue to run in background for eg..
+  few of the System Services are:
+  1. device activation software
+  2. network socket activation
+  3. mounting the network drives
+  4. security programs etc  
+running them as background programs bring lot of problems.  
+1. background process will not start automatically at the boot of the operating system. the user of the computer upon bringing up the operating system has to manually run all these mandatory service programs, which is a very tedious job. The end-user find it very complex to use the computer since he has do lot of things before using the machine
+
+2. These Software Programs/Services has to execute in background until we shutdown the machine, so the enduser has to ensure the background process we launched is running and was not crashed. monitoring and restarting these process is a difficult job
+
+3. Managing these service programs like stopping or restarting or disabling is a difficult job
+
+We need someone who should take care of running such mandatory system services upon boot of the operating system, monitoring and recovering when those are crashed automatically otherwise it becomes very difficult to use the computer even thought the operating system has been booted.
+To help us in managing such mandatory programs the GNU project has provided a utility called systemd init system.
+  
+Majority of Linux distro has adopted and ships systemd init as a default software utility for managing the programs as services. Ubuntu uses systemd init for managing the system services.
+  
+We can use systemd init and can do the below things:
+1. we can register our program as a service unit in systemd init system, so that monitoring and managing the program will be taken care by systemd
+2. we can control the service units registered with systemd like stop, start, restart, disable, enable etc.
+  
+There are 2 types of systemd services are there
+1. services provided by the package installations (System Services)
+There are certain softwares upon installing should run from the boot of the operating system util System Shutdown. For eg..
+  1. Apache2
+  2. Ngnix
+  3. Weblogic Server
+etc
+Since these are mandatory programs to be executed upon boot time on any computer whereever installed, these software programs are registered as services automatically during the time of installations.
+For eg..
+  while installing the apache2 server using apt install -y apache2, the apt tool post installation of the apache2 package will reads the service unit definition of the software package and register it as a service in systemd init automatically.
+      
+2. system administrator services (User Services)
+These are programs/utilities written by the administrator/user of the system, which seems to be mandatory to be executed upon boot of operating system and continue to run util shutdown.
+For e.g.. an application administrator can write a program that performs periodical backup of the data, these programs should run right away from boot util shutdown, so these programs are registered as services manually by the administrator of the computer which are called "System Administrator services"
+---------------------------------------------------------------------------------------------------------
+    
+In the #1 since those are registered automatically as services during installation we need to only control/monitor them using systemd tool. but in the #2 case since these are our programs/utilities developed by us registering them as services should be done manually and monitor.
+    
+How to register a program/utility as a systemd service in the systemd init?
+We need to write a service unit definition file describing the details of the Software program and how to run it to and provide as an input to systemd init by placing in a directory location.
+There are 2 different locations from where systemd init system can read our service unit definition.
+  1. packaged services that comes through software installations these service unit definition files are located under /usr/lib/systemd/system
+  2. system administrator services are placed under /etc/systemd/system
+  
+  
+
+  
+  
+
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+
+    
+  
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
