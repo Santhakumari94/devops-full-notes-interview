@@ -225,7 +225,241 @@ There are 2 different locations from where systemd init system can read our serv
   1. packaged services that comes through software installations these service unit definition files are located under /usr/lib/systemd/system
   2. system administrator services are placed under /etc/systemd/system
   
+  How many types of processes are there in linux?
+There are 2 types of processes are there
+1. foreground process
+2. background process
+
+What is the difference between a background process and a systemd init service, why and when we need to use systemd init service?
+systemd is an init system for linux operating system provided by GNU projects and many of the linux distros including ubuntu ships systemd as a default init system. (init = system bootup processes will be managed by the systemd)
+There are lot of differences interms of running a process as a service against a background process.
+  1. systemd init services would be started automatically during the boot time of the operating system whereas a background process has to be launched by the user of the computer manually after booting the operating system.
+  2. if we run a process as a background process, the user has to monitor and restart incase of crash. whereas if we run it as a systemd service, monitoring and restarting incase of crash will be taken care by systemd init service itself.
+  3. if we run a process as a background process, we need to use process related commands in monitoring and managing the process which is a errorneous and difficult job. user has to be careful in picking up the pid (process id) of the process to manage it, which sometimes could be wrongly pickedup. Instead register your program as a service with a name with systemd init system, so that we can manage the process through the systemd commands by referring the name of service easily.
+    
+There are 2 parts in working or using systemd init system.
+1. Register a program as a Systemd init Service
+2. Monitoring and Controlling the Systemd init service
+here to monitoring and control the process systemd has provided commands for start, stop, restart, status, reload, disable and enable the service, so we dont need to use process management commands at all.
   
+1. How to Register a program as a Service in Systemd init?
+There are 2 types of systemd services are there.
+  1.1 Services provided by the packaged installations
+  1.2 System administrator services
+  
+1.1 Services provided by the packaged installations
+There are lot of packaged software distributions which are provided by the vendors, which would be registered as systemd init services during the time of installation.
+For eg. apache2 or ngnix are server softwares should run upon the boot of the operating system and should restart incase of crash, to ensure their availability the vendors by themself provide unit definition file as part of their packaged distribution, so that during the time of installation those will be registered as services automatically.
+  
+1.2 System administrator services
+The System administrator may have certain program to be ran mandatorily to manage the system for eg. diskcheck, process monitoring or memory management utilities etc instead of running these mandatory programs as background process, he can register them as systemd services manually once, so that those will be executed during bootup and managed by systemd itself.
+  
+How to register a program as a systemd service?
+To manage our program by systemd, we need to provide the information about our program to systemd init system by writing a service unit file.
+We need to follow standard structure in writing the service unit file describing the program and place unit files in a designated location (pre-defined location), so that systemd init system can read and host our programs as services.
+  
+The service unit file usually ends withan extension as "filename.service" and should be placed under the below locations
+1. /usr/lib/systemd/system = all the packaged services service unit files are placed here
+2. /etc/systemd/system = system administrator service unit files are placed here
+
+The service unit file contains 3 sections
+1. Unit
+information about the service is described in this secion. For eg. description the service which appears while managing the service. when does the service should be started. what are the required services inorder to run this service. 
+description, order and dependencies
+
+2. Service
+Commands for managing the program like start, stop and restart. Type of the Service, how to manage it.
+how to run and manage  
+  
+3. Install
+Installation instructions on how to install and run the service.
+when it should be installed
+
+What is a systemd init service what is the purpose of it?
+systemd init is a utility software using which we can run a software program as a managed service. The systemd takes care of running the program during the boot up and monitors and restarts in case of crash etc.
+  
+There are 2 parts of working with systemd init.
+  1. registering a program as a service
+  2. monitoring and controlling the service using systemd commands
+  
+How many types of services are there?
+There are 2 types of services are there
+1. Services provided by the packaged installations
+2. System administrator service
+
+How to register a program as a Service with Systemd init?
+If systemd has to manage or control our program like start, stop, restart etc we need to describe or provide information about our program to systemd by writing an service unit file.
+
+We need to write the Service unit file based on the standard format provided by systemd and should place in designated location, so that systemd can pickup the file and can read and manage the program as service.
+  
+There are 2 locations under which the service unit file exists.
+1. /usr/lib/systemd/system = packaged installations
+2. /etc/systemd/system = administrator services
+
+Format of writing service unit file:
+Every Service unit file is named with a standard convention of filename.service and it has to be defined with 3 sections
+1. Unit
+we describe the information about the service and their hard and soft dependencies.
+Description = "documentation or information while accessing the service"  
+After = after which service, this service has to run (order)
+Requires = To install and run the service what other services are required (mandatory)
+Wants = nice to have these services to run the current service (soft dependency)  
+  
+2. Service
+commands for starting, stoping and restarting along with that type of the service
+ExecStartPre=any other command to be executed before executing ExecStart
+ExecStart=command
+ExecStartPost=after starting the service, any other command to be executed
+Restart=always
+ExecStop=command to be executed to stop the service
+Type
+  The service can be of 5 types
+  1. simple = ExecStart
+  2. forking = forking is a technic of launching a program out of another program execution where the second program executes as a separate process independent of the first program. Now systemd upon lauching our service by executing ExecStart, our program/command will lauch another process by forking which is managed as a service    
+  3. oneshot = executes only once and terminate
+  4. dbus = runs a program as a daemon with name
+  5. notify = notifies other service to start
+
+3. Install
+How does the service should be installed 
+WantedBy=multi-user.target
+multi-user.target = it has to be registered and started during boot of the operating system.
+  
+
+How to register a program as a systemd init service?
+We need to write service unit file describing the details of the program we want to register as Service. The name of the service unit will be usually filename.service and should be placed in one of the below location depends on the type of the service
+/usr/lib/systemd/system (packaged installation service)
+/etc/systemd/system (administrator services)
+  
+What is the structure of unit file definition?
+There are 3 sections are there.
+1. Unit
+Unit section describes the information about the service like
+description, hard dependencies, soft dependencies and order
+  
+2. Service
+commands to run the program like
+ExecStart
+ExecStartPre
+ExecStartPost
+Restart
+Type
+
+The type of the service can be of 5
+  1. Simple
+  2. Forking
+  3. dbus
+  4. oneshot
+  5. notify
+
+3. Install
+how does the service should be installed and run within the system.
+WantedBy=multi-user.target
+
+freemem.service
+----------------
+[Unit]
+Description=free memory monitoring service
+
+[Service]
+Type=simple
+StartExecPre=/home/sriman/freemem/startfreemem.sh
+StartExec=/home/sriman/freemem/freemem.sh
+ExecStop=/home/sriman/freemem/stopfreemem.sh
+
+[Install]
+WantedBy=multi-user.target
+
+
+Now we need to enable the above service, to do this we need reload the systemd (deamon) process. Systemd has provided an utility called systemctl.
+Using systemctl commands we can control the systemd init system, it is a super user command available in /sbin directory linux filesystem.
+  
+1. sudo systemctl daemon-reload = will reload the service unit files
+2. sudo systemctl start servicename = to start a service
+3. sudo systemctl stop servicename = to stop a running service
+4. sudo systemctl restart servicename = to restart an existing service
+5. sudo systemctl status servicename = to know the status of an existing service
+6. sudo systemctl disable servicename = to disable a service completely, so that even a restart will not run it
+7. sudo systemctl reenable servicename = to enable the disable service
+---------------------------------------------------------------------------------------------------------
+How to host an static web application using apache2 Httpd server?
+  
+An web application can be classified into 2 types
+1. static web application
+2. dynamic web application
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 
   
   
