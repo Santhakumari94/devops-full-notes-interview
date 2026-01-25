@@ -1,7 +1,18 @@
 what is azure?
+Microsoft Azure is a cloud platform that provides infrastructure and platform services like virtual machines, networking, storage, and managed services. From a DevOps perspective, I use Azure to provision infrastructure using IaC, build CI/CD pipelines with Azure DevOps, deploy applications, and monitor them using Azure Monitor and Log Analytics.
+
 Microsoft Azure is Microsoft’s cloud computing platform that provides services like virtual machines, storage, databases, networking, and cloud-based application hosting. 
 It allows organizations to build, deploy, and manage applications through Microsoft-managed data centers instead of maintaining physical servers.
 
 Azure is Microsoft’s cloud platform used for hosting applications, managing data, and running infrastructure in the cloud.
 
 Azure is Microsoft’s cloud computing platform offering IaaS, PaaS, and SaaS services, enabling scalable application hosting, data storage, networking, and security through the cloud.
+
+What Azure services have you worked with?
+Azure DevOps, AKS, Azure Virtual Machines, Azure Storage, Azure Container Registry, Azure Monitor, Log Analytics, and Azure Key Vault.
+How does CI/CD work in Azure DevOps?
+We use YAML pipelines. Code commit triggers a build pipeline, runs tests, builds artifacts or Docker images, pushes them to ACR, and then a release pipeline deploys them to AKS or VMs.
+How do you manage secrets in Azure?
+We use Azure Key Vault to store secrets, certificates, and keys, and integrate it with pipelines and applications instead of hardcoding credentials.
+How do you monitor applications in Azure?
+Using Azure Monitor, Log Analytics, and Application Insights to track logs, metrics, alerts, and application performance.
