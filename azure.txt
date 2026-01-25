@@ -16,3 +16,24 @@ How do you manage secrets in Azure?
 We use Azure Key Vault to store secrets, certificates, and keys, and integrate it with pipelines and applications instead of hardcoding credentials.
 How do you monitor applications in Azure?
 Using Azure Monitor, Log Analytics, and Application Insights to track logs, metrics, alerts, and application performance.
+
+Region and resource group and resource?
+An Azure subscription is the top-level container that manages billing and access. Inside a subscription, resource groups are logical containers that organize related resources. Resources are the actual Azure services, like VMs or databases, that live inside a resource group
+
+What is Azure Storage?
+
+Azure Storage is a cloud service that lets you store and manage data in the Microsoft Azure cloud.
+It’s secure, durable, scalable, and highly available, so you don’t have to worry about running out of space or hardware failure.
+
+Type	Description	Example Use Case
+Blob Storage	Stores unstructured data like text or binary	Images, videos, backups
+File Storage	Fully managed file shares accessible via SMB/NFS	Shared files for applications
+Queue Storage	Stores messages for asynchronous communication	Messaging between app components
+Table Storage	Stores NoSQL structured data	Logs, user metadata
+Disk Storage	Persistent block-level storage for VMs	VM operating system and data disks.
+
+
+LRS & ZRS
+LRS, or Locally Redundant Storage, keeps 3 copies of data within a single data center to protect against hardware failure. ZRS, or Zone-Redundant Storage, keeps 3 copies across different availability zones in the same region, so it can survive a data center outage. LRS is cheaper but less resilient; ZRS is more resilient for critical workloads.
+
+Azure offers different storage replication options for durability and availability. LRS keeps 3 copies in a single data center, ZRS keeps 3 copies across availability zones in a region, GRS keeps 6 copies across primary and secondary regions for disaster recovery, and RA-GRS is like GRS but lets you read from the secondary region. LRS is cheapest, RA-GRS is most resilient.
