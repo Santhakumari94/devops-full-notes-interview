@@ -1,0 +1,21 @@
+TCS
+1 . Brief about CI/CD pipeline stages which are using in your project?
+2. Terraform lifecycle parameters?
+A. In Terraform, lifecycle is a meta-argument inside a resource block that modifies how Terraform handles resource creation, replacement, and destruction. 
+   It includes create_before_destroy for zero downtime, prevent_destroy for protecting critical resources, ignore_changes to prevent drift from external updates, 
+   and replace_triggered_by to force recreation when dependencies change.
+
+   depends_on controls dependency order, while lifecycle controls resource behavior during create, update, or destroy operations.
+   
+3. Terraform about ignore-change param?
+A. ignore_changes is a lifecycle meta-argument in Terraform that instructs Terraform to ignore updates to specified resource attributes during plan and apply,
+   typically used when external systems modify those attributes.
+
+4. How to upgrade AKS cluster?
+5. what is kubectl command for to see node size?
+6. what is configmap?
+7. what is purpose of APIM and application loader balance, if apim exposing api endpoints, is it work with application loader balancer also or not?
+8. tell us about your self?
+9. which terraform version you are using?
+10. through pipeline to connect with azure key vault what should be there?
+11. is service connection restrict the user to access pipelines?
