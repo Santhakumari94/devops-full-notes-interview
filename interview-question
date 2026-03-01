@@ -12,7 +12,50 @@ A. ignore_changes is a lifecycle meta-argument in Terraform that instructs Terra
    typically used when external systems modify those attributes.
 
 4. How to upgrade AKS cluster?
+   Check Current Version:
+   az aks show --resource-group <rg-name> --name <cluster-name> --query kubernetesVersion
+   Check Available Upgrade Versions:
+   az aks get-upgrades --resource-group <rg-name> --name <cluster-name> --output table
+   Upgrade Control Plane + Node Pools (Standard Way):
+   az aks upgrade \
+  --resource-group <rg-name> \
+  --name <cluster-name> \
+  --kubernetes-version <target-version>
+This upgrades:
+
+Control plane
+
+All node pools (if not specified separately)
+
+You will be prompted to confirm.
+Upgrade Node Pool Separately (Recommended in Production)
+
+First upgrade control plane only:
+   az aks upgrade \
+  --resource-group <rg-name> \
+  --name <cluster-name> \
+  --kubernetes-version <target-version> \
+  --control-plane-only
+   Then upgrade node pool:
+   az aks nodepool upgrade \
+  --resource-group <rg-name> \
+  --cluster-name <cluster-name> \
+  --name <nodepool-name> \
+  --kubernetes-version <target-version>
+Verify Upgrade:
+Verify Upgrade
+
 5. what is kubectl command for to see node size?
+   kubectl get nodes
+   kubectl top nodes
+   Example output:
+   NAME        CPU(cores)   CPU%   MEMORY(bytes)   MEMORY%
+   node-1      250m         6%     1024Mi          20%
+
+   To check node size in Kubernetes, I use kubectl describe node to see CPU and memory capacity and allocatable resources. 
+   For real-time usage, I use kubectl top nodes. In cloud environments like EKS or GKE, I also verify the instance 
+   type via node labels or the cloud provider console
+
 6. what is configmap?
 7. what is purpose of APIM and application loader balance, if apim exposing api endpoints, is it work with application loader balancer also or not?
 8. tell us about your self?
