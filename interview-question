@@ -71,3 +71,19 @@ how you find or see if pipeline fail?
 if you have frentend and backed api and db how you will deploy them in cluster?
 
 
+write cicd pipeline code in azuredevops sample piece for building?
+what is terraform drift?
+what is terraform export?
+how to recover terraform statefile in locall?
+how to release terraform lock?
+what is backend in terraform?
+what is process you are doing in production deployments
+write a shell script how shellscript determine json file and how to add data in json file and how to read?
+what is configmap and secrets?
+how to store credentials in pipeline code or keyvault how do you integrede?
+what are instructions you are using in docker file?
+how do you run docker image?
+what is argument and cmd in docker?
+
+
+
