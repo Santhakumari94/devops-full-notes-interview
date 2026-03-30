@@ -99,3 +99,5 @@ taint and tolarence?
 how to schedule pods in kubernetes cluster?
 how to schedule pod in specific node?
 what are the ways to deploy pods?
+Affinity/anti-affinity
+Taints/tolerations
