@@ -120,3 +120,5 @@ Internally, Kubernetes actually converts nodeSelector into Node Affinity, so you
 In real projects, I usually prefer Node Affinity because it’s more flexible and scalable, especially when we have multiple node groups or need preference-based scheduling.”
 
 Taints/tolerations?
+Taints are applied on nodes to restrict pods from being scheduled, and tolerations are added to pods to allow them to
+run on those tainted nodes. By default, pods cannot go to tainted nodes unless they have matching tolerations.
