@@ -107,7 +107,14 @@ Service Endpoint = secure public road
 Private Endpoint = bring the service inside your network
 
 how to connect valut from cicd pipeline code?
+
 what is compute gallary in azure?
+Azure Compute Gallery is a central repository for VM images. It allows versioning, replication across regions, 
+and sharing, making it easier to deploy consistent and scalable virtual machines in Azure
+
+In my last project, we created a base VM image with all company software installed. We stored it in Azure Compute Gallery, 
+then used it to deploy 100+ VMs across 3 regions with the same configuration. This saved a lot of time and ensured consistency
+
 how to login azure cli,  what is the command?
 when we create service connection what componebt we get?
 what are system and user nodes?
