@@ -91,6 +91,15 @@ parameters:
 - name: environment
   type: string
   default: dev
+  values:
+  - dev
+  - test
+  - prod
+
+parameters:
+- name: environment
+  type: string
+  default: dev
 steps:
 - script: echo "Environment is ${{ parameters.environment }}"
 variables:
