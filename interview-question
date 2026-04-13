@@ -151,6 +151,30 @@ One key difference is that Node Affinity supports complex logic like OR conditio
 Internally, Kubernetes actually converts nodeSelector into Node Affinity, so you can think of nodeSelector as a simplified version of required Node Affinity.
 In real projects, I usually prefer Node Affinity because it’s more flexible and scalable, especially when we have multiple node groups or need preference-based scheduling.”
 
+kubectl label nodes node1 disktype=ssd
+spec:
+  nodeSelector:
+    disktype: ssd
+
+spec:
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+        - matchExpressions:
+          - key: disktype
+            operator: In
+            values:
+            - ssd
 Taints/tolerations?
 Taints are applied on nodes to restrict pods from being scheduled, and tolerations are added to pods to allow them to
 run on those tainted nodes. By default, pods cannot go to tainted nodes unless they have matching tolerations.
+
+kubectl taint nodes node1 key=value:NoSchedule
+
+spec:
+  tolerations:
+  - key: "key"
+    operator: "Equal"
+    value: "value"
+    effect: "NoSchedule"
