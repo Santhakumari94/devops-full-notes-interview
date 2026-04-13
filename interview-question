@@ -125,10 +125,30 @@ In my last project, we created a base VM image with all company software install
 then used it to deploy 100+ VMs across 3 regions with the same configuration. This saved a lot of time and ensured consistency
 
 how to login azure cli,  what is the command?
+az login → normal user login
+az login --service-principal → automation login
+az login --tenant → specific directory
+
+az login --service-principal \
+  --username <client-id> \
+  --password <client-secret> \
+  --tenant <tenant-id>
+
 when we create service connection what componebt we get?
 what are system and user nodes?
 taint and tolarence?
+
 how to schedule pods in kubernetes cluster?
+Method	Use Case
+nodeSelector	Simple node targeting
+nodeAffinity	Flexible node rules
+taints/tolerations	Dedicated nodes
+pod affinity	Co-locate pods
+pod anti-affinity	Spread pods
+resources	Capacity-aware scheduling
+topology spread	Even distribution
+
+If you want, I can give you real-world scenarios (like scheduling GPU workloads, multi-zone deployments, or production best practices).
 how to schedule pod in specific node?
 what are the ways to deploy pods?
 
@@ -166,6 +186,14 @@ spec:
             operator: In
             values:
             - ssd
+spec:
+  affinity:
+    podAntiAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+      - labelSelector:
+          matchLabels:
+            app: my-app
+        topologyKey: "kubernetes.io/hostname"
 Taints/tolerations?
 Taints are applied on nodes to restrict pods from being scheduled, and tolerations are added to pods to allow them to
 run on those tainted nodes. By default, pods cannot go to tainted nodes unless they have matching tolerations.
