@@ -206,3 +206,41 @@ spec:
     operator: "Equal"
     value: "value"
     effect: "NoSchedule"
+
+APPYOVal pipelin?
+create environment in azure devops console under pipelines, then referin pipeline code.
+- stage: Deploy_Prod
+  dependsOn: Deploy_QA
+  jobs:
+  - deployment: DeployJob
+    environment: prod
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - script: echo "Deploying to prod"
+
+Approval = Environment + Deployment Job
+
+Azure DevOps supports deployment strategies like runOnce for simple deployments, rolling for gradual deployments across multiple instances, 
+and canary for partial releases to test before full rollout.
+
+strategy:
+  canary:
+    increments: [10, 50]
+    deploy:
+      steps:
+      - script: echo "Canary deployment"
+
+strategy:
+  rolling:
+    maxParallel: 2
+    deploy:
+      steps:
+      - script: echo "Deploying in batches"
+
+strategy:
+  runOnce:
+    deploy:
+      steps:
+      - script: echo "Deploying once"
