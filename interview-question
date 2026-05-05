@@ -244,3 +244,14 @@ strategy:
     deploy:
       steps:
       - script: echo "Deploying once"
+
+
+tech Mahindra 
+terraform workspace?
+write key vault provisioning terraform code?
+difference between count and for each?
+write a script for clean up diskfull everyday?
+how you manage key sensitive data in pipelines?
+how you troubleshooting high traffic and crashed cluster?
+what is blue green and Canary deployments?
+
