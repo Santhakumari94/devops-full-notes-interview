@@ -1844,6 +1844,16 @@ spring.datasource.password=welcome1
 docker container run --name urotaxi --network urotaxinetwork --env-file=variables.env -p 8080:8080 -d urotax:1.0
 	
 	
+cognizant 
+
+git branching strategies?
+azure github action?
+helm and aks architecture?
+terraform lifecycle code?
+aks issues how to troubleshoot?
+how helm works?
+tell me about your project and rolls and responsibilities?
+how to integrate azure devops pipeline to terraform and terraform lifecycle?
 
 
 
