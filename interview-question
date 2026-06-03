@@ -254,4 +254,19 @@ write a script for clean up diskfull everyday?
 how you manage key sensitive data in pipelines?
 how you troubleshooting high traffic and crashed cluster?
 what is blue green and Canary deployments?
+k
+
+LTM
+what are docker network types?
+difference between azure cni and kubenet while creating aks?
+use of sudo su?
+how you are creating image taga?
+kubernetes architecture?
+
+
+
+l
+
+
+
 
